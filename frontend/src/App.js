@@ -40,27 +40,6 @@ const GET_PRODUCT = gql`
   }
 `;
 
-const UPDATE_PRODUCT = gql`
-  mutation UpdateProduct(
-    $id: String!
-    $name: String
-    $inStock: Boolean
-    $description: String
-  ) {
-    updateProduct(
-      id: $id
-      name: $name
-      inStock: $inStock
-      description: $description
-    ) {
-      id
-      name
-      inStock
-      description
-    }
-  }
-`;
-
 class App extends Component {
   state = {
     products: [],
@@ -116,31 +95,6 @@ class App extends Component {
       });
   };
 
-  handleUpdateProduct = (client, productData) => {
-    this.setState({ loading: true, error: null });
-    client
-      .mutate({
-        mutation: UPDATE_PRODUCT,
-        variables: productData,
-      })
-      .then((result) => {
-        // Update the products list with the modified product
-        const updatedProduct = result.data.updateProduct;
-        this.setState(prevState => ({
-          products: prevState.products.map(product =>
-            product.id === updatedProduct.id ? updatedProduct : product
-          ),
-          loading: false
-        }));
-      })
-      .catch((error) => {
-        this.setState({ 
-          error: error.message, 
-          loading: false 
-        });
-      });
-  };
-
   renderProductList = (products) => {
     return products.map(product => (
       <div key={product.id} className="product-card">
@@ -160,7 +114,7 @@ class App extends Component {
   };
 
   render() {
-    const { products, selectedProduct, loading, error } = this.state;
+    const { products, loading, error } = this.state;
 
     return (
       <ApolloConsumer>
@@ -186,13 +140,6 @@ class App extends Component {
             <div className="products-grid">
               {products.length > 0 && this.renderProductList(products)}
             </div>
-
-            {selectedProduct && (
-              <div className="product-detail">
-                <h2>{selectedProduct.name}</h2>
-                <p>{selectedProduct.description}</p>
-              </div>
-            )}
           </div>
         )}
       </ApolloConsumer>
