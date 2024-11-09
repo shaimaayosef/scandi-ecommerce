@@ -108,17 +108,18 @@ class GraphQL {
                     'products' => [
                         'type' => Type::listOf($productType),
                         'args' => [
-                            'category' => ['type' => Type::string()],
+                            'category' => Type::string(),
                         ],
-                        'resolve' => function($args) {
+                        'resolve' => function ($root, $args) {
                             $conn = self::getDatabaseConnection();
-                            $query = "SELECT * FROM products";
-                            if (isset($args['category'])) {
-                                $query .= " WHERE category = ?";
-                                $stmt = $conn->prepare($query);
-                                $stmt->bind_param("s", $args['category']);
-                            } else {
-                                $stmt = $conn->prepare($query);
+                            $category = isset($args['category']) ? $args['category'] : null;
+                            $sql = "SELECT * FROM products";
+                            if ($category) {
+                                $sql .= " WHERE category = ?";
+                            }
+                            $stmt = $conn->prepare($sql);
+                            if ($category) {
+                                $stmt->bind_param("s", $category);
                             }
                             $stmt->execute();
                             $result = $stmt->get_result();
