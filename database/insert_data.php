@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "scandiAdmin";
 $password = "1234";
-$dbname = "scandi2";
+$dbname = "scandi4ecommerce";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -56,7 +56,7 @@ foreach ($data['data']['categories'] as $category) {
 $stmtCategory->close();
 
 // Insert products and related data
-$stmtProduct = $conn->prepare("INSERT INTO products (id, name, inStock, description, category, brand) VALUES (?, ?, ?, ?, ?, ?)");
+$stmtProduct = $conn->prepare("INSERT INTO products (id, name, inStock, stok, description, category, brand, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 $stmtPrice = $conn->prepare("INSERT INTO product_prices (product_id, amount, currency_label, currency_symbol) VALUES (?, ?, ?, ?)");
 $stmtAttr = $conn->prepare("INSERT INTO product_attributes (product_id, attribute_name, attribute_type) VALUES (?, ?, ?)");
 $stmtAttrItem = $conn->prepare("INSERT INTO product_attribute_items (product_id, attribute_name, display_value, value, item_id) VALUES (?, ?, ?, ?, ?)");
@@ -66,7 +66,7 @@ foreach ($data['data']['products'] as $index => $product) {
     echo "Processing product " . ($index + 1) . " of " . count($data['data']['products']) . "\n";
     
     // Insert product
-    $stmtProduct->bind_param("ssisss", $product['id'], $product['name'], $product['inStock'], $product['description'], $product['category'], $product['brand']);
+    $stmtProduct->bind_param("ssisss", $product['id'], $product['name'], $product['inStock'], $product['stok'], $product['description'], $product['category'], $product['brand'], $product['category_id']);
     if (!$stmtProduct->execute()) {
         echo "Error inserting product: " . $stmtProduct->error . "\n";
     }

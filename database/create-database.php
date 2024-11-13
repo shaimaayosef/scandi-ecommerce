@@ -4,7 +4,7 @@
 $servername = "localhost";
 $username = "scandiAdmin";
 $password = "1234";
-$dbname = "scandi2";
+$dbname = "scandi4ecommerce";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -35,9 +35,12 @@ $sql = "CREATE TABLE IF NOT EXISTS products (
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     inStock BOOLEAN,
+    stock INTEGER,
     description TEXT,
     category VARCHAR(255),
-    brand VARCHAR(255)
+    brand VARCHAR(255),
+    category_id INT,
+    FOREIGN KEY (category_id) REFERENCES categories(id)
 )";
 
 if ($conn->query($sql) === TRUE) {
@@ -105,3 +108,4 @@ if ($conn->query($sql) === TRUE) {
 }
 
 $conn->close();
+

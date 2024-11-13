@@ -2,16 +2,16 @@
     "data": {
         "categories": [
             {
-                "name": "all",
-                "__typename": "Category"
+            "category": "all",
+            "__typename": "category"
             },
             {
-                "name": "clothes",
-                "__typename": "Category"
+            "category": "clothes",
+            "__typename": "category"
             },
             {
-                "name": "tech",
-                "__typename": "Category"
+            "category": "tech",
+            "__typename": "category"
             }
         ],
         "products": [
@@ -19,6 +19,7 @@
                 "id": "huarache-x-stussy-le",
                 "name": "Nike Air Huarache Le",
                 "inStock": true,
+                "stock": 10,
                 "gallery": [
                     "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_2_720x.jpg?v=1612816087",
                     "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_1_720x.jpg?v=1612816087",
@@ -80,6 +81,7 @@
                 "id": "jacket-canada-goosee",
                 "name": "Jacket",
                 "inStock": true,
+                "stock": 5,
                 "gallery": [
                     "https://images.canadagoose.com/image/upload/w_480,c_scale,f_auto,q_auto:best/v1576016105/product-image/2409L_61.jpg",
                     "https://images.canadagoose.com/image/upload/w_480,c_scale,f_auto,q_auto:best/v1576016107/product-image/2409L_61_a.jpg",
@@ -143,6 +145,7 @@
                 "id": "ps-5",
                 "name": "PlayStation 5",
                 "inStock": true,
+                "stock": 3,
                 "gallery": [
                     "https://images-na.ssl-images-amazon.com/images/I/510VSJ9mWDL._SL1262_.jpg",
                     "https://images-na.ssl-images-amazon.com/images/I/610%2B69ZsKCL._SL1500_.jpg",
@@ -230,6 +233,7 @@
                 "id": "xbox-series-s",
                 "name": "Xbox Series S 512GB",
                 "inStock": false,
+                "stock": 0,
                 "gallery": [
                     "https://images-na.ssl-images-amazon.com/images/I/71vPCX0bS-L._SL1500_.jpg",
                     "https://images-na.ssl-images-amazon.com/images/I/71q7JTbRTpL._SL1500_.jpg",
@@ -317,6 +321,7 @@
                 "id": "apple-imac-2021",
                 "name": "iMac 2021",
                 "inStock": true,
+                "stock": 2,
                 "gallery": [
                     "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/imac-24-blue-selection-hero-202104?wid=904&hei=840&fmt=jpeg&qlt=80&.v=1617492405000"
                 ],
@@ -402,6 +407,7 @@
                 "id": "apple-iphone-12-pro",
                 "name": "iPhone 12 Pro",
                 "inStock": true,
+                "stock": 5,
                 "gallery": [
                     "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/iphone-12-pro-family-hero?wid=940&amp;hei=1112&amp;fmt=jpeg&amp;qlt=80&amp;.v=1604021663000"
                 ],
@@ -485,6 +491,7 @@
                 "id": "apple-airpods-pro",
                 "name": "AirPods Pro",
                 "inStock": false,
+                "stock": 0,
                 "gallery": [
                     "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/MWP22?wid=572&hei=572&fmt=jpeg&qlt=95&.v=1591634795000"
                 ],
@@ -509,6 +516,7 @@
                 "id": "apple-airtag",
                 "name": "AirTag",
                 "inStock": true,
+                "stock": 100,
                 "gallery": [
                     "https://store.storeimages.cdn-apple.com/4982/as-images.apple.com/is/airtag-double-select-202104?wid=445&hei=370&fmt=jpeg&qlt=95&.v=1617761672000"
                 ],
