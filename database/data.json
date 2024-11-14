@@ -2,15 +2,15 @@
     "data": {
         "categories": [
             {
-            "category": "all",
+            "name": "all",
             "__typename": "category"
             },
             {
-            "category": "clothes",
+            "name": "clothes",
             "__typename": "category"
             },
             {
-            "category": "tech",
+            "name": "tech",
             "__typename": "category"
             }
         ],

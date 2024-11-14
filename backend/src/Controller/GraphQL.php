@@ -6,7 +6,6 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 require __DIR__ . '/../../vendor/autoload.php';
-
 use GraphQL\GraphQL as GraphQLBase;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -20,7 +19,7 @@ class GraphQL {
         $servername = "localhost";
         $username = "scandiAdmin";
         $password = "1234";
-        $dbname = "scandi4ecommerce";
+        $dbname = "scandi2";
         
         $conn = new \mysqli($servername, $username, $password, $dbname);
         
@@ -108,18 +107,17 @@ class GraphQL {
                     'products' => [
                         'type' => Type::listOf($productType),
                         'args' => [
-                            'category' => Type::string(),
+                            'category' => ['type' => Type::string()],
                         ],
-                        'resolve' => function ($root, $args) {
+                        'resolve' => function($rootValue, $args) {
                             $conn = self::getDatabaseConnection();
-                            $category = isset($args['category']) ? $args['category'] : null;
-                            $sql = "SELECT * FROM products";
-                            if ($category) {
-                                $sql .= " WHERE category = ?";
-                            }
-                            $stmt = $conn->prepare($sql);
-                            if ($category) {
-                                $stmt->bind_param("s", $category);
+                            $query = "SELECT * FROM products";
+                            if (isset($args['category'])) {
+                                $query .= " WHERE category = ?";
+                                $stmt = $conn->prepare($query);
+                                $stmt->bind_param("s", $args['category']);
+                            } else {
+                                $stmt = $conn->prepare($query);
                             }
                             $stmt->execute();
                             $result = $stmt->get_result();
@@ -152,9 +150,61 @@ class GraphQL {
                 ]
             ]);
 
+            // Mutation Type
+            $mutationType = new ObjectType([
+                'name' => 'Mutation',
+                'fields' => [
+                    'updateProduct' => [
+                        'type' => $productType,
+                        'args' => [
+                            'id' => ['type' => Type::nonNull(Type::string())],
+                            'name' => ['type' => Type::string()],
+                            'inStock' => ['type' => Type::boolean()],
+                            'description' => ['type' => Type::string()],
+                        ],
+                        'resolve' => function($rootValue, $args) {
+                            $conn = self::getDatabaseConnection();
+                            $updates = [];
+                            $types = "";
+                            $values = [];
+                            $values[] = $args['id'];
+                            
+                            foreach (['name', 'inStock', 'description'] as $field) {
+                                if (isset($args[$field])) {
+                                    $updates[] = "$field = ?";
+                                    $types .= $field === 'inStock' ? 'i' : 's';
+                                    $values[] = $args[$field];
+                                }
+                            }
+                            
+                            if (empty($updates)) {
+                                return null;
+                            }
+                            
+                            $query = "UPDATE products SET " . implode(", ", $updates) . " WHERE id = ?";
+                            $stmt = $conn->prepare($query);
+                            $stmt->bind_param("s" . $types, ...$values);
+                            $stmt->execute();
+                            
+                            // Fetch and return updated product
+                            $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
+                            $stmt->bind_param("s", $args['id']);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $product = $result->fetch_assoc();
+                            
+                            $stmt->close();
+                            $conn->close();
+                            return $product;
+                        }
+                    ]
+                ]
+            ]);
+
             $schema = new Schema(
                 (new SchemaConfig())
                     ->setQuery($queryType)
+                    ->setMutation($mutationType)
             );
 
             $rawInput = file_get_contents('php://input');
@@ -181,5 +231,4 @@ class GraphQL {
         echo json_encode($output);
     }
 }
-
 GraphQL::handle();

@@ -47,16 +47,27 @@ $data = json_decode($jsonData, true);
 echo "Total products in JSON: " . count($data['data']['products']) . "\n";
 
 // Insert categories
-$stmtCategory = $conn->prepare("INSERT INTO categories (name) VALUES (?)");
-foreach ($data['data']['categories'] as $category) {
-    $stmtCategory->bind_param("s", $category['name']);
-    $stmtCategory->execute();
-    echo "Inserted category: {$category['name']}\n";
+if (isset($data['data']['categories']) && is_array($data['data']['categories'])) {
+    $stmtCategory = $conn->prepare("INSERT INTO categories (name) VALUES (?)");
+    foreach ($data['data']['categories'] as $category) {
+        if (!empty($category['name'])) {
+            $stmtCategory->bind_param("s", $category['name']);
+            $stmtCategory->execute();
+            echo "Inserted category: {$category['name']}\n";
+        } else {
+            echo "Skipped inserting category with null name.\n";
+        }
+    }
+    $stmtCategory->close();
+} else {
+    echo "No categories found in JSON data.\n";
 }
-$stmtCategory->close();
 
-// Insert products and related data
-$stmtProduct = $conn->prepare("INSERT INTO products (id, name, inStock, stok, description, category, brand, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+// Prepare a statement to find category ID by name
+$stmtCategory = $conn->prepare("SELECT id FROM categories WHERE name = ?");
+
+// Prepare statements for inserting products and related data
+$stmtProduct = $conn->prepare("INSERT INTO products (id, name, inStock, stock, description, category, brand, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 $stmtPrice = $conn->prepare("INSERT INTO product_prices (product_id, amount, currency_label, currency_symbol) VALUES (?, ?, ?, ?)");
 $stmtAttr = $conn->prepare("INSERT INTO product_attributes (product_id, attribute_name, attribute_type) VALUES (?, ?, ?)");
 $stmtAttrItem = $conn->prepare("INSERT INTO product_attribute_items (product_id, attribute_name, display_value, value, item_id) VALUES (?, ?, ?, ?, ?)");
@@ -65,12 +76,23 @@ $stmtGallery = $conn->prepare("INSERT INTO product_gallery (product_id, image_ur
 foreach ($data['data']['products'] as $index => $product) {
     echo "Processing product " . ($index + 1) . " of " . count($data['data']['products']) . "\n";
     
+    // Fetch the category ID based on the product's category name
+    $stmtCategory->bind_param("s", $product['category']);
+    $stmtCategory->execute();
+    $result = $stmtCategory->get_result();
+
+    if ($row = $result->fetch_assoc()) {
+        $category_id = $row['id']; // Found the category ID
+    } else {
+        $category_id = null; // Category not found, handle this case as needed
+    }
+
     // Insert product
-    $stmtProduct->bind_param("ssisss", $product['id'], $product['name'], $product['inStock'], $product['stok'], $product['description'], $product['category'], $product['brand'], $product['category_id']);
+    $stmtProduct->bind_param("ssissssi", $product['id'], $product['name'], $product['inStock'], $product['stock'], $product['description'], $product['category'], $product['brand'], $category_id);
     if (!$stmtProduct->execute()) {
         echo "Error inserting product: " . $stmtProduct->error . "\n";
     }
-    
+
     // Insert price
     foreach ($product['prices'] as $price) {
         $stmtPrice->bind_param("sdss", $product['id'], $price['amount'], $price['currency']['label'], $price['currency']['symbol']);
@@ -78,14 +100,14 @@ foreach ($data['data']['products'] as $index => $product) {
             echo "Error inserting price: " . $stmtPrice->error . "\n";
         }
     }
-    
+
     // Insert attributes and attribute items
     foreach ($product['attributes'] as $attribute) {
         $stmtAttr->bind_param("sss", $product['id'], $attribute['name'], $attribute['type']);
         if (!$stmtAttr->execute()) {
             echo "Error inserting attribute: " . $stmtAttr->error . "\n";
         }
-        
+
         foreach ($attribute['items'] as $item) {
             $stmtAttrItem->bind_param("sssss", $product['id'], $attribute['name'], $item['displayValue'], $item['value'], $item['id']);
             if (!$stmtAttrItem->execute()) {
@@ -93,7 +115,7 @@ foreach ($data['data']['products'] as $index => $product) {
             }
         }
     }
-    
+
     // Insert gallery images
     foreach ($product['gallery'] as $imageUrl) {
         $stmtGallery->bind_param("ss", $product['id'], $imageUrl);
@@ -101,9 +123,10 @@ foreach ($data['data']['products'] as $index => $product) {
             echo "Error inserting gallery image: " . $stmtGallery->error . "\n";
         }
     }
-    
+
     echo "Finished processing product: {$product['name']} (ID: {$product['id']})\n";
 }
+
 
 $stmtProduct->close();
 $stmtPrice->close();
