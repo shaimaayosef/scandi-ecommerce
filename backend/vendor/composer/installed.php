@@ -3,7 +3,7 @@
         'name' => 'scandiweb/fullstack',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '662056824a7ddb30a0c2dce43d20b6e89eddb3f7',
+        'reference' => '4838905e7ac2a46a6076d862fd5059e4433ee8b2',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'scandiweb/fullstack' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '662056824a7ddb30a0c2dce43d20b6e89eddb3f7',
+            'reference' => '4838905e7ac2a46a6076d862fd5059e4433ee8b2',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
