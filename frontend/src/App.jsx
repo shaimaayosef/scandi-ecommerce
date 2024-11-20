@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
+import PropTypes from 'prop-types';
 import { ApolloConsumer } from '@apollo/client';
 import gql from 'graphql-tag';
 
@@ -126,6 +127,9 @@ product(id: $id) {
 `;
 
 class App extends Component {
+  static propTypes = {
+    client: PropTypes.object.isRequired,
+  };
   state = {
     categories: [],
     productsAttributesItems: [],
@@ -213,8 +217,7 @@ class App extends Component {
     client
     .query({ query: GET_ProductsGallery })
     .then((result) => {
-      this.setState
-      ({
+      this.setState({
         productsGallery: result.data.productsGallery,
         loading: false
         });

@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { createRoot } from 'react-dom/client'
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import './index.css';
-import App from './App';
+
+import './index.css'
+import App from './App.jsx'
 
 // Initialize Apollo Client
 const client = new ApolloClient({
@@ -10,10 +10,9 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-// Create root and render the application
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+createRoot(document.getElementById('root')).render(
   <ApolloProvider client={client}>
     <App />
   </ApolloProvider>
-);
+
+)
