@@ -36,10 +36,141 @@ class GraphQL {
         try {
 
            
+            
+
+            $productAttributeItems = new ObjectType([
+                'name' => 'ProductAttributeItems',
+                'fields' => [
+                    'item_id' => ['type' => Type::string()],
+                    'attribute_name' => ['type' => Type::string()],
+                    'display_value' => ['type' => Type::string()],
+                    'value' => ['type' => Type::string()],
+                    'product_id' => ['type' => Type::string()],
+                ]
+            ]);
+
+            $productAttributes = new ObjectType([
+                'name' => 'ProductAttributes',
+                'fields' => [
+                    'id' => ['type' => Type::string()],
+                    'attribute_name' => ['type' => Type::string()],
+                    'items' => ['type' => Type::listOf($productAttributeItems),
+                                'resolve' => function($productAttributes) {
+                                    $conn = self::getDatabaseConnection();
+                                    $stmt = $conn->prepare("SELECT * FROM product_attribute_items WHERE product_id = ?");
+                                    $stmt->bind_param("s", $productAttributes['product_id']);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+                                    $productAttributeItems = [];
+                                    while ($row = $result->fetch_assoc()) {
+                                        $productAttributeItems[] = $row;
+                                    }
+                                    $stmt->close();
+                                    $conn->close();
+                                    return $productAttributeItems;
+                                }],
+                    'attribute_type' => ['type' => Type::string()],
+                    'product_id' => ['type' => Type::string()],
+                ]
+            ]);
+
+            $productGallery = new ObjectType([
+                'name' => 'ProductGallery',
+                'fields' => [
+                    'product_id' => ['type' => Type::string()],
+                    'image_url' => ['type' => Type::string()],
+                ]
+            ]);
+
+            $productPrice = new ObjectType([
+                'name' => 'ProductPrice',
+                'fields' => [
+                    'product_id' => ['type' => Type::string()],
+                    'amount' => ['type' => Type::float()],
+                    'currency_label' => ['type' => Type::string()],
+                    'currency_symbol' => ['type' => Type::string()],
+                ]
+            ]);
+
+            $product = new ObjectType([
+                'name' => 'Product',
+                'fields' => [
+                    'id' => ['type' => Type::string()],
+                    'name' => ['type' => Type::string()],
+                    'in_stock' => ['type' => Type::boolean()],
+                    'stock' => ['type' => Type::int()],
+                    'gallery' => ['type' => Type::listOf($productGallery),
+                                  'resolve' => function($product) {
+                                        $conn = self::getDatabaseConnection();
+                                        $stmt = $conn->prepare("SELECT * FROM product_gallery WHERE product_id = ?");
+                                        $stmt->bind_param("s", $product['id']);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+                                        $productGallery = [];
+                                        while ($row = $result->fetch_assoc()) {
+                                            $productGallery[] = $row;
+                                        }
+                                        $stmt->close();
+                                        $conn->close();
+                                        return $productGallery;
+                                    }],
+                    'description' => ['type' => Type::string()],
+                    'category' => ['type' => Type::string()],
+                    'attributes' => ['type' => Type::listOf($productAttributes),
+                                     'resolve' => function($product) {
+                                        $conn = self::getDatabaseConnection();
+                                        $stmt = $conn->prepare("SELECT * FROM product_attributes WHERE product_id = ?");
+                                        $stmt->bind_param("s", $product['id']);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+                                        $productAttributes = [];
+                                        while ($row = $result->fetch_assoc()) {
+                                            $productAttributes[] = $row;
+                                        }
+                                        $stmt->close();
+                                        $conn->close();
+                                        return $productAttributes;
+                                    }],
+                    'price' => ['type' => Type::listOf($productPrice),
+                                'resolve' => function($product) {
+                                    $conn = self::getDatabaseConnection();
+                                    $stmt = $conn->prepare("SELECT * FROM product_prices WHERE product_id = ?");
+                                    $stmt->bind_param("s", $product['id']);
+                                    $stmt->execute();
+                                    $result = $stmt->get_result();
+                                    $productPrices = [];
+                                    while ($row = $result->fetch_assoc()) {
+                                        $productPrices[] = $row;
+                                    }
+                                    $stmt->close();
+                                    $conn->close();
+                                    return $productPrices;
+                                }
+                            ],
+                    'brand' => ['type' => Type::string()],
+                    'category_id' => ['type' => Type::int()],
+                ]
+            ]);
+
             $categoryType = new ObjectType([
                 'name' => 'Category',
                 'fields' => [
                     'name' => ['type' => Type::string()],
+                    'products' => ['type' => Type::listOf($product),
+                                   'resolve' => function($category) {
+                                        $conn = self::getDatabaseConnection();
+                                        $stmt = $conn->prepare("SELECT * FROM products WHERE category_id = ?");
+                                        $stmt->bind_param("i", $category['id']);
+                                        $stmt->execute();
+                                        $result = $stmt->get_result();
+                                        $products = [];
+                                        while ($row = $result->fetch_assoc()) {
+                                            $products[] = $row;
+                                        }
+                                        $stmt->close();
+                                        $conn->close();
+                                        return $products;
+                                    }],
                 ]
             ]);
             
@@ -50,15 +181,164 @@ class GraphQL {
                         'type' => Type::listOf($categoryType),
                         'resolve' => function() {
                             $conn = self::getDatabaseConnection();
-                            $result = $conn->query("SELECT * FROM categories");
+                            $stmt = $conn->prepare("SELECT * FROM categories");
+                            if (!$stmt) {
+                                throw new RuntimeException("Prepare failed: " . $conn->error);
+                            }
+                            if (!$stmt->execute()) {
+                                throw new RuntimeException("Execute failed: " . $stmt->error);
+                            }
+                            $result = $stmt->get_result();
+                            if (!$result) {
+                                throw new RuntimeException("Getting result set failed: " . $stmt->error);
+                            }
                             $categories = [];
                             while ($row = $result->fetch_assoc()) {
                                 $categories[] = $row;
                             }
+                            $stmt->close();
                             $conn->close();
                             return $categories;
                         }
-                    ]
+                    ],
+                    'productsAttributesItems' => [
+                        'type' => Type::listOf($productAttributeItems),
+                        'resolve' => function() {
+                            $conn = self::getDatabaseConnection();
+                            $stmt = $conn->prepare("SELECT * FROM product_attribute_items");
+                            if (!$stmt) {
+                                throw new RuntimeException("Prepare failed: " . $conn->error);
+                            }
+                            if (!$stmt->execute()) {
+                                throw new RuntimeException("Execute failed: " . $stmt->error);
+                            }
+                            $result = $stmt->get_result();
+                            if (!$result) {
+                                throw new RuntimeException("Getting result set failed: " . $stmt->error);
+                            }
+                            $productAttributeItems = [];
+                            while ($row = $result->fetch_assoc()) {
+                                $productAttributeItems[] = $row;
+                            }
+                            $stmt->close();
+                            $conn->close();
+                            return $productAttributeItems;
+                        }
+                    ],
+                    'productsAttributes' => [
+                        'type' => Type::listOf($productAttributes),
+                        'resolve' => function() {
+                            $conn = self::getDatabaseConnection();
+                            $stmt = $conn->prepare("SELECT * FROM product_attributes");
+                            if (!$stmt) {
+                                throw new RuntimeException("Prepare failed: " . $conn->error);
+                            }
+                            if (!$stmt->execute()) {
+                                throw new RuntimeException("Execute failed: " . $stmt->error);
+                            }
+                            $result = $stmt->get_result();
+                            if (!$result) {
+                                throw new RuntimeException("Getting result set failed: " . $stmt->error);
+                            }
+                            $productAttributes = [];
+                            while ($row = $result->fetch_assoc()) {
+                                $productAttributes[] = $row;
+                            }
+                            $stmt->close();
+                            $conn->close();
+                            return $productAttributes;
+                        }
+                    ],
+                    'productsGallery' => [
+                        'type' => Type::listOf($productGallery),
+                        'resolve' => function() {
+                            $conn = self::getDatabaseConnection();
+                            $stmt = $conn->prepare("SELECT * FROM product_gallery");
+                            if (!$stmt) {
+                                throw new RuntimeException("Prepare failed: " . $conn->error);
+                            }
+                            if (!$stmt->execute()) {
+                                throw new RuntimeException("Execute failed: " . $stmt->error);
+                            }
+                            $result = $stmt->get_result();
+                            if (!$result) {
+                                throw new RuntimeException("Getting result set failed: " . $stmt->error);
+                            }
+                            $productGallery = [];
+                            while ($row = $result->fetch_assoc()) {
+                                $productGallery[] = $row;
+                            }
+                            $stmt->close();
+                            $conn->close();
+                            return $productGallery;
+                        }
+                    ],
+                    'productsPrices' => [
+                        'type' => Type::listOf($productPrice),
+                        'resolve' => function() {
+                            $conn = self::getDatabaseConnection();
+                            $stmt = $conn->prepare("SELECT * FROM product_prices");
+                            if (!$stmt) {
+                                throw new RuntimeException("Prepare failed: " . $conn->error);
+                            }
+                            if (!$stmt->execute()) {
+                                throw new RuntimeException("Execute failed: " . $stmt->error);
+                            }
+                            $result = $stmt->get_result();
+                            if (!$result) {
+                                throw new RuntimeException("Getting result set failed: " . $stmt->error);
+                            }
+                            $productPrices = [];
+                            while ($row = $result->fetch_assoc()) {
+                                $productPrices[] = $row;
+                            }
+
+                            $stmt->close();
+                            $conn->close();
+                            
+                            return $productPrices;
+                        }
+                    ],
+                    'category' => [
+                        'type' => $categoryType,
+                        'args' => [
+                            'name' => Type::nonNull(Type::string())
+                        ],
+                        'resolve' => function($root, $args) {
+                            $conn = self::getDatabaseConnection();
+                            $stmt = $conn->prepare("SELECT * FROM categories WHERE name = ?");
+                            $stmt->bind_param("s", $args['name']);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $category = $result->fetch_assoc();
+                            $stmt->close();
+                            $conn->close();
+                            return $category ?: null;
+                        }
+                    ],
+                    'product' => [
+                        'type' => $product, // Returns a single Product type
+                        'args' => [
+                            'id' => Type::nonNull(Type::string()) // Argument 'id' is required
+                        ],
+                        'resolve' => function($root, $args) {
+                            $conn = self::getDatabaseConnection();
+                            $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
+                            $stmt->bind_param("s", $args['id']);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $product = $result->fetch_assoc();
+                            $stmt->close();
+                            $conn->close();
+
+                            if (!$product) {
+                                throw new RuntimeException("Product with id {$args['id']} not found.");
+                            }
+
+                            return $product;
+                        }
+                    ],
+                        
                 ]
             ]);
 
