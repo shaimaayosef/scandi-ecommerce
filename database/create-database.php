@@ -4,7 +4,7 @@
 $servername = "localhost";
 $username = "scandiAdmin";
 $password = "1234";
-$dbname = "scandi4ecommerce";
+$dbname = "scandish";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -64,6 +64,7 @@ if ($conn->query($sql) === TRUE) {
 
 // Create product_attributes table
 $sql = "CREATE TABLE IF NOT EXISTS product_attributes (
+    id VARCHAR(255),
     product_id VARCHAR(255),
     attribute_name VARCHAR(255),
     attribute_type VARCHAR(255),

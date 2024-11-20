@@ -21,7 +21,7 @@ class GraphQL {
         $servername = "localhost";
         $username = "scandiAdmin";
         $password = "1234";
-        $dbname = "scandi4ecommerce";
+        $dbname = "scandish";
         
         $conn = new \mysqli($servername, $username, $password, $dbname);
         

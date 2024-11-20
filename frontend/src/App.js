@@ -89,7 +89,7 @@ name
 }
 `;
 const GET_ProductById = gql`
-query GetProductById($id: Int!) {
+query GetProductById($id: String!) {
 product(id: $id) {
         id
         name

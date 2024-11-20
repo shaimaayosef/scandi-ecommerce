@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "scandiAdmin";
 $password = "1234";
-$dbname = "scandi4ecommerce";
+$dbname = "scandish";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -69,7 +69,7 @@ $stmtCategory = $conn->prepare("SELECT id FROM categories WHERE name = ?");
 // Prepare statements for inserting products and related data
 $stmtProduct = $conn->prepare("INSERT INTO products (id, name, inStock, stock, description, category, brand, category_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
 $stmtPrice = $conn->prepare("INSERT INTO product_prices (product_id, amount, currency_label, currency_symbol) VALUES (?, ?, ?, ?)");
-$stmtAttr = $conn->prepare("INSERT INTO product_attributes (product_id, attribute_name, attribute_type) VALUES (?, ?, ?)");
+$stmtAttr = $conn->prepare("INSERT INTO product_attributes (id, product_id, attribute_name, attribute_type) VALUES (?, ?, ?, ?)");
 $stmtAttrItem = $conn->prepare("INSERT INTO product_attribute_items (product_id, attribute_name, display_value, value, item_id) VALUES (?, ?, ?, ?, ?)");
 $stmtGallery = $conn->prepare("INSERT INTO product_gallery (product_id, image_url) VALUES (?, ?)");
 
@@ -103,7 +103,7 @@ foreach ($data['data']['products'] as $index => $product) {
 
     // Insert attributes and attribute items
     foreach ($product['attributes'] as $attribute) {
-        $stmtAttr->bind_param("sss", $product['id'], $attribute['name'], $attribute['type']);
+        $stmtAttr->bind_param("ssss", $attribute['id'], $product['id'], $attribute['name'], $attribute['type']);
         if (!$stmtAttr->execute()) {
             echo "Error inserting attribute: " . $stmtAttr->error . "\n";
         }
