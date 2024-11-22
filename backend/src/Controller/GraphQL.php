@@ -21,7 +21,7 @@ class GraphQL {
         $servername = "localhost";
         $username = "scandiAdmin";
         $password = "1234";
-        $dbname = "scandish";
+        $dbname = "scandi4ecommerce";
         
         $conn = new \mysqli($servername, $username, $password, $dbname);
         
@@ -34,9 +34,6 @@ class GraphQL {
 
     static public function handle() {
         try {
-
-           
-            
 
             $productAttributeItems = new ObjectType([
                 'name' => 'ProductAttributeItems',
@@ -57,8 +54,8 @@ class GraphQL {
                     'items' => ['type' => Type::listOf($productAttributeItems),
                                 'resolve' => function($productAttributes) {
                                     $conn = self::getDatabaseConnection();
-                                    $stmt = $conn->prepare("SELECT * FROM product_attribute_items WHERE product_id = ?");
-                                    $stmt->bind_param("s", $productAttributes['product_id']);
+                                    $stmt = $conn->prepare("SELECT * FROM product_attribute_items WHERE product_id = ? AND attribute_name = ?");
+                                    $stmt->bind_param("ss", $productAttributes['product_id'], $productAttributes['attribute_name']);
                                     $stmt->execute();
                                     $result = $stmt->get_result();
                                     $productAttributeItems = [];
@@ -73,7 +70,6 @@ class GraphQL {
                     'product_id' => ['type' => Type::string()],
                 ]
             ]);
-
             $productGallery = new ObjectType([
                 'name' => 'ProductGallery',
                 'fields' => [
@@ -97,7 +93,7 @@ class GraphQL {
                 'fields' => [
                     'id' => ['type' => Type::string()],
                     'name' => ['type' => Type::string()],
-                    'in_stock' => ['type' => Type::boolean()],
+                    'inStock' => ['type' => Type::boolean()],
                     'stock' => ['type' => Type::int()],
                     'gallery' => ['type' => Type::listOf($productGallery),
                                   'resolve' => function($product) {
@@ -159,8 +155,12 @@ class GraphQL {
                     'products' => ['type' => Type::listOf($product),
                                    'resolve' => function($category) {
                                         $conn = self::getDatabaseConnection();
-                                        $stmt = $conn->prepare("SELECT * FROM products WHERE category_id = ?");
-                                        $stmt->bind_param("i", $category['id']);
+                                        if ($category['name'] === 'all') {
+                                            $stmt = $conn->prepare("SELECT * FROM products");
+                                        } else {
+                                            $stmt = $conn->prepare("SELECT * FROM products WHERE category = ?");
+                                            $stmt->bind_param("s", $category['name']);
+                                        }
                                         $stmt->execute();
                                         $result = $stmt->get_result();
                                         $products = [];
@@ -201,121 +201,6 @@ class GraphQL {
                             return $categories;
                         }
                     ],
-                    'productsAttributesItems' => [
-                        'type' => Type::listOf($productAttributeItems),
-                        'resolve' => function() {
-                            $conn = self::getDatabaseConnection();
-                            $stmt = $conn->prepare("SELECT * FROM product_attribute_items");
-                            if (!$stmt) {
-                                throw new RuntimeException("Prepare failed: " . $conn->error);
-                            }
-                            if (!$stmt->execute()) {
-                                throw new RuntimeException("Execute failed: " . $stmt->error);
-                            }
-                            $result = $stmt->get_result();
-                            if (!$result) {
-                                throw new RuntimeException("Getting result set failed: " . $stmt->error);
-                            }
-                            $productAttributeItems = [];
-                            while ($row = $result->fetch_assoc()) {
-                                $productAttributeItems[] = $row;
-                            }
-                            $stmt->close();
-                            $conn->close();
-                            return $productAttributeItems;
-                        }
-                    ],
-                    'productsAttributes' => [
-                        'type' => Type::listOf($productAttributes),
-                        'resolve' => function() {
-                            $conn = self::getDatabaseConnection();
-                            $stmt = $conn->prepare("SELECT * FROM product_attributes");
-                            if (!$stmt) {
-                                throw new RuntimeException("Prepare failed: " . $conn->error);
-                            }
-                            if (!$stmt->execute()) {
-                                throw new RuntimeException("Execute failed: " . $stmt->error);
-                            }
-                            $result = $stmt->get_result();
-                            if (!$result) {
-                                throw new RuntimeException("Getting result set failed: " . $stmt->error);
-                            }
-                            $productAttributes = [];
-                            while ($row = $result->fetch_assoc()) {
-                                $productAttributes[] = $row;
-                            }
-                            $stmt->close();
-                            $conn->close();
-                            return $productAttributes;
-                        }
-                    ],
-                    'productsGallery' => [
-                        'type' => Type::listOf($productGallery),
-                        'resolve' => function() {
-                            $conn = self::getDatabaseConnection();
-                            $stmt = $conn->prepare("SELECT * FROM product_gallery");
-                            if (!$stmt) {
-                                throw new RuntimeException("Prepare failed: " . $conn->error);
-                            }
-                            if (!$stmt->execute()) {
-                                throw new RuntimeException("Execute failed: " . $stmt->error);
-                            }
-                            $result = $stmt->get_result();
-                            if (!$result) {
-                                throw new RuntimeException("Getting result set failed: " . $stmt->error);
-                            }
-                            $productGallery = [];
-                            while ($row = $result->fetch_assoc()) {
-                                $productGallery[] = $row;
-                            }
-                            $stmt->close();
-                            $conn->close();
-                            return $productGallery;
-                        }
-                    ],
-                    'productsPrices' => [
-                        'type' => Type::listOf($productPrice),
-                        'resolve' => function() {
-                            $conn = self::getDatabaseConnection();
-                            $stmt = $conn->prepare("SELECT * FROM product_prices");
-                            if (!$stmt) {
-                                throw new RuntimeException("Prepare failed: " . $conn->error);
-                            }
-                            if (!$stmt->execute()) {
-                                throw new RuntimeException("Execute failed: " . $stmt->error);
-                            }
-                            $result = $stmt->get_result();
-                            if (!$result) {
-                                throw new RuntimeException("Getting result set failed: " . $stmt->error);
-                            }
-                            $productPrices = [];
-                            while ($row = $result->fetch_assoc()) {
-                                $productPrices[] = $row;
-                            }
-
-                            $stmt->close();
-                            $conn->close();
-                            
-                            return $productPrices;
-                        }
-                    ],
-                    'category' => [
-                        'type' => $categoryType,
-                        'args' => [
-                            'name' => Type::nonNull(Type::string())
-                        ],
-                        'resolve' => function($root, $args) {
-                            $conn = self::getDatabaseConnection();
-                            $stmt = $conn->prepare("SELECT * FROM categories WHERE name = ?");
-                            $stmt->bind_param("s", $args['name']);
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-                            $category = $result->fetch_assoc();
-                            $stmt->close();
-                            $conn->close();
-                            return $category ?: null;
-                        }
-                    ],
                     'product' => [
                         'type' => $product, // Returns a single Product type
                         'args' => [
@@ -336,6 +221,61 @@ class GraphQL {
                             }
 
                             return $product;
+                        }
+                    ],
+
+                    'category' => [
+                        'type' => $categoryType,
+                        'args' => [
+                            'name' => Type::nonNull(Type::string())
+                        ],
+                        'resolve' => function($root, $args) {
+                            $conn = self::getDatabaseConnection();
+                            $stmt = $conn->prepare("SELECT * FROM categories WHERE name = ?");
+                            if (!$stmt) {
+                                throw new RuntimeException("Prepare failed: " . $conn->error);
+                            }
+                            $stmt->bind_param("s", $args['name']);
+                            if (!$stmt->execute()) {
+                                throw new RuntimeException("Execute failed: " . $stmt->error);
+                            }
+                            $result = $stmt->get_result();
+                            if (!$result) {
+                                throw new RuntimeException("Getting result set failed: " . $stmt->error);
+                            }
+                            $category = $result->fetch_assoc();
+                            $stmt->close();
+                            $conn->close();
+
+                            if (!$category) {
+                                throw new RuntimeException("Category with name '{$args['name']}' not found.");
+                            }
+
+                            // Fetch products for this category
+                            $category['products'] = (function($categoryName) {
+                                $conn = self::getDatabaseConnection();
+                                $stmt = $conn->prepare("SELECT * FROM products WHERE category = ?");
+                                if (!$stmt) {
+                                    throw new RuntimeException("Prepare failed: " . $conn->error);
+                                }
+                                $stmt->bind_param("s", $categoryName);
+                                if (!$stmt->execute()) {
+                                    throw new RuntimeException("Execute failed: " . $stmt->error);
+                                }
+                                $result = $stmt->get_result();
+                                if (!$result) {
+                                    throw new RuntimeException("Getting result set failed: " . $stmt->error);
+                                }
+                                $products = [];
+                                while ($row = $result->fetch_assoc()) {
+                                    $products[] = $row;
+                                }
+                                $stmt->close();
+                                $conn->close();
+                                return $products;
+                            })($args['name']);
+
+                            return $category;
                         }
                     ],
                         

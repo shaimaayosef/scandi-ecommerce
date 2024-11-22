@@ -1,0 +1,269 @@
+[
+    "__typename": "Product",
+    "id": "huarache-x-stussy-le",
+    "name": "Nike Air Huarache Le",
+    "inStock": null,
+    "stock": 10,
+    "gallery": [
+      {
+        "__typename": "ProductGallery",
+        "product_id": "huarache-x-stussy-le",
+        "image_url": "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_2_720x.jpg?v=1612816087"
+      },
+      {
+        "__typename": "ProductGallery",
+        "product_id": "huarache-x-stussy-le",
+        "image_url": "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_1_720x.jpg?v=1612816087"
+      },
+      {
+        "__typename": "ProductGallery",
+        "product_id": "huarache-x-stussy-le",
+        "image_url": "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_3_720x.jpg?v=1612816087"
+      },
+      {
+        "__typename": "ProductGallery",
+        "product_id": "huarache-x-stussy-le",
+        "image_url": "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_5_720x.jpg?v=1612816087"
+      },
+      {
+        "__typename": "ProductGallery",
+        "product_id": "huarache-x-stussy-le",
+        "image_url": "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_4_720x.jpg?v=1612816087"
+      }
+    ],
+    "description": "<p>Great sneakers for everyday use!</p>",
+    "category": "clothes",
+    "attributes": [
+      {
+        "__typename": "ProductAttributes",
+        "id": "Size",
+        "attribute_name": "Size",
+        "items": [
+          {
+            "__typename": "ProductAttributeItems",
+            "item_id": "40",
+            "attribute_name": "Size",
+            "display_value": "40",
+            "value": "40",
+            "product_id": "huarache-x-stussy-le"
+          },
+          {
+            "__typename": "ProductAttributeItems",
+            "item_id": "41",
+            "attribute_name": "Size",
+            "display_value": "41",
+            "value": "41",
+            "product_id": "huarache-x-stussy-le"
+          },
+          {
+            "__typename": "ProductAttributeItems",
+            "item_id": "42",
+            "attribute_name": "Size",
+            "display_value": "42",
+            "value": "42",
+            "product_id": "huarache-x-stussy-le"
+          },
+          {
+            "__typename": "ProductAttributeItems",
+            "item_id": "43",
+            "attribute_name": "Size",
+            "display_value": "43",
+            "value": "43",
+            "product_id": "huarache-x-stussy-le"
+          }
+        ],
+        "attribute_type": "text",
+        "product_id": "huarache-x-stussy-le"
+      }
+    ],
+    "price": [
+      {
+        "__typename": "ProductPrice",
+        "amount": 144.69,
+        "currency_label": "USD",
+        "currency_symbol": "$"
+      }
+    ],
+    "brand": "Nike x Stussy",
+    "category_id": 2
+  } ,
+  {
+    "product": {
+      "__typename": "Product",
+      "id": "xbox-series-s",
+      "name": "Xbox Series S 512GB",
+      "inStock": false,
+      "stock": 0,
+      "gallery": [
+        {
+          "__typename": "ProductGallery",
+          "product_id": "xbox-series-s",
+          "image_url": "https://images-na.ssl-images-amazon.com/images/I/71vPCX0bS-L._SL1500_.jpg"
+        },
+        {
+          "__typename": "ProductGallery",
+          "product_id": "xbox-series-s",
+          "image_url": "https://images-na.ssl-images-amazon.com/images/I/71q7JTbRTpL._SL1500_.jpg"
+        },
+        {
+          "__typename": "ProductGallery",
+          "product_id": "xbox-series-s",
+          "image_url": "https://images-na.ssl-images-amazon.com/images/I/71iQ4HGHtsL._SL1500_.jpg"
+        },
+        {
+          "__typename": "ProductGallery",
+          "product_id": "xbox-series-s",
+          "image_url": "https://images-na.ssl-images-amazon.com/images/I/61IYrCrBzxL._SL1500_.jpg"
+        },
+        {
+          "__typename": "ProductGallery",
+          "product_id": "xbox-series-s",
+          "image_url": "https://images-na.ssl-images-amazon.com/images/I/61RnXmpAmIL._SL1500_.jpg"
+        }
+      ],
+      "description": "\n<div>\n    <ul>\n        <li><span>Hardware-beschleunigtes Raytracing macht dein Spiel noch realistischer</span></li>\n        <li><span>Spiele Games mit bis zu 120 Bilder pro Sekunde</span></li>\n        <li><span>Minimiere Ladezeiten mit einer speziell entwickelten 512GB NVMe SSD und wechsle mit Quick Resume nahtlos zwischen mehreren Spielen.</span></li>\n        <li><span>Xbox Smart Delivery stellt sicher, dass du die beste Version deines Spiels spielst, egal, auf welcher Konsole du spielst</span></li>\n        <li><span>Spiele deine Xbox One-Spiele auf deiner Xbox Series S weiter. Deine Fortschritte, Erfolge und Freundesliste werden automatisch auf das neue System übertragen.</span></li>\n        <li><span>Erwecke deine Spiele und Filme mit innovativem 3D Raumklang zum Leben</span></li>\n        <li><span>Der brandneue Xbox Wireless Controller zeichnet sich durch höchste Präzision, eine neue Share-Taste und verbesserte Ergonomie aus</span></li>\n        <li><span>Ultra-niedrige Latenz verbessert die Reaktionszeit von Controller zum Fernseher</span></li>\n        <li><span>Verwende dein Xbox One-Gaming-Zubehör -einschließlich Controller, Headsets und mehr</span></li>\n        <li><span>Erweitere deinen Speicher mit der Seagate 1 TB-Erweiterungskarte für Xbox Series X (separat erhältlich) und streame 4K-Videos von Disney+, Netflix, Amazon, Microsoft Movies &amp; TV und mehr</span></li>\n    </ul>\n</div>",
+      "category": "tech",
+      "attributes": [
+        {
+          "__typename": "ProductAttributes",
+          "id": "Color",
+          "attribute_name": "Color",
+          "items": [
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "Green",
+              "attribute_name": "Color",
+              "display_value": "Green",
+              "value": "#44FF03",
+              "product_id": "xbox-series-s"
+            },
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "Cyan",
+              "attribute_name": "Color",
+              "display_value": "Cyan",
+              "value": "#03FFF7",
+              "product_id": "xbox-series-s"
+            },
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "Blue",
+              "attribute_name": "Color",
+              "display_value": "Blue",
+              "value": "#030BFF",
+              "product_id": "xbox-series-s"
+            },
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "Black",
+              "attribute_name": "Color",
+              "display_value": "Black",
+              "value": "#000000",
+              "product_id": "xbox-series-s"
+            },
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "White",
+              "attribute_name": "Color",
+              "display_value": "White",
+              "value": "#FFFFFF",
+              "product_id": "xbox-series-s"
+            },
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "512G",
+              "attribute_name": "Capacity",
+              "display_value": "512G",
+              "value": "512G",
+              "product_id": "xbox-series-s"
+            },
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "1T",
+              "attribute_name": "Capacity",
+              "display_value": "1T",
+              "value": "1T",
+              "product_id": "xbox-series-s"
+            }
+          ],
+          "attribute_type": "swatch",
+          "product_id": "xbox-series-s"
+        },
+        {
+          "__typename": "ProductAttributes",
+          "id": "Capacity",
+          "attribute_name": "Capacity",
+          "items": [
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "Green",
+              "attribute_name": "Color",
+              "display_value": "Green",
+              "value": "#44FF03",
+              "product_id": "xbox-series-s"
+            },
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "Cyan",
+              "attribute_name": "Color",
+              "display_value": "Cyan",
+              "value": "#03FFF7",
+              "product_id": "xbox-series-s"
+            },
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "Blue",
+              "attribute_name": "Color",
+              "display_value": "Blue",
+              "value": "#030BFF",
+              "product_id": "xbox-series-s"
+            },
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "Black",
+              "attribute_name": "Color",
+              "display_value": "Black",
+              "value": "#000000",
+              "product_id": "xbox-series-s"
+            },
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "White",
+              "attribute_name": "Color",
+              "display_value": "White",
+              "value": "#FFFFFF",
+              "product_id": "xbox-series-s"
+            },
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "512G",
+              "attribute_name": "Capacity",
+              "display_value": "512G",
+              "value": "512G",
+              "product_id": "xbox-series-s"
+            },
+            {
+              "__typename": "ProductAttributeItems",
+              "item_id": "1T",
+              "attribute_name": "Capacity",
+              "display_value": "1T",
+              "value": "1T",
+              "product_id": "xbox-series-s"
+            }
+          ],
+          "attribute_type": "text",
+          "product_id": "xbox-series-s"
+        }
+      ],
+      "price": [
+        {
+          "__typename": "ProductPrice",
+          "amount": 333.99,
+          "currency_label": "USD",
+          "currency_symbol": "$"
+        }
+      ],
+      "brand": "Microsoft",
+      "category_id": 3
+    }
+  ]
