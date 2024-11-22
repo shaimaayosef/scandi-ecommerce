@@ -79,42 +79,39 @@ product(id: $id) {
 }
 }
 `;
-// export const GET_ProductAttributeItems = gql`
-//   query GetProductAttributeItems {
-//     productsAttributesItems {
-//       item_id,
-//       attribute_name,
-//       display_value,
-//       value,
-//       product_id
-//     }
-//   }
-// `;
-// export const GET_ProductAttributes = gql`
-//   query GetProductAttributes {
-//     productsAttributes {
-//       id,
-//       attribute_name,
-//       attribute_type,
-//       product_id
-//     }
-//   }
-// `;
-// export const GET_ProductsGallery = gql`
-// query GetProductsGallery {
-// productsGallery {
-// image_url,
-// product_id
-// }
-// }
-// `;
-// export const GET_ProductsPrices = gql`
-// query GetProductsPrices {
-// productsPrices {
-// amount
-// currency_label
-// currency_symbol
-// product_id
-// }
-// }
-// `;
+
+// Mutation to create an order with user info
+export const CREATE_ORDER_WITH_USER_INFO = gql`
+  mutation CreateOrder($input: OrderInput!) {
+    createOrder(input: $input) {
+      id
+      name
+      phone_number
+      total
+      created_at
+      items {
+        product_id
+        quantity
+        price
+      }
+    }
+  }
+`;
+
+// Query to fetch order details by ID
+export const GET_ORDER_BY_ID = gql`
+  query GetOrderById($id: Int!) {
+    order(id: $id) {
+      id
+      name
+      phone_number
+      total
+      created_at
+      items {
+        product_id
+        quantity
+        price
+      }
+    }
+  }
+`;

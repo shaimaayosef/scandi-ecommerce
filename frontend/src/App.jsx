@@ -8,17 +8,25 @@ import { connect } from 'react-redux';
 import { getCategories} from "./store/categoriesSlice";
 import Modal from "./components/modal/Modal.jsx"
 import CategoryList from "./pages/CategoryList.jsx"
+import OrderConfirmation from './pages/OrderConfirmation/OrderConfirmation.jsx';
+import OrderDetails from './pages/OrderDetails/OrderDetails.jsx';
 
 
 class App extends Component {
-  
-  render() {
+  componentDidMount() {
     this.props.client
       .query({
         query: GET_CATEGORIES,
       })
-      .then((result) => this.props.getCategories(result.data.categories));
-      
+      .then((result) => {
+        this.props.getCategories(result.data.categories);
+      })
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
+      });
+  }
+  render() {
+  
       const Wrapper = (props) => {
         const params = useParams();
         return (
@@ -46,6 +54,8 @@ class App extends Component {
               <Route path="/" element={<CategoryWrapper />} />
               <Route path="/:category" element={<CategoryWrapper />} />
               <Route path="/description/:id" element={<Wrapper />} />
+              <Route path="/order-confirmation" element={<OrderConfirmation/>} />
+              <Route path="/order-details/:orderId" element={<OrderDetails/>} />
             </Routes>
           ) : (
             <p>loading...</p>
@@ -56,11 +66,13 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  categories: state.categories.categories,
-  showCart: state.cart.showCart,
-  showModal: state.cart.showModal,
-});
+const mapStateToProps = (state) => {
+  return {
+    categories: state.categories.categories,
+    showCart: state.cart.showCart,
+    showModal: state.cart.showModal,
+  };
+};
 
 const mapDispatchToProps = { getCategories };
 

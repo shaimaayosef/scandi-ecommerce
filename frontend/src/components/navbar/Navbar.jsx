@@ -48,7 +48,7 @@ class Navbar extends Component {
               alt="nav logo"
               className="nav-logo"
               onClick={() => {
-                this.handleItemClick.bind(this,0);
+                this.handleItemClick(0);
                 this.props.setShowCart(false);
               }}
             />

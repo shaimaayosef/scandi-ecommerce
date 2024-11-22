@@ -1,7 +1,7 @@
 import { Component } from "react";
 import CartItem from "./CartItem";
 import { CartOverlayStyle } from "./styles/cartOverlay.styled";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { setShowCart, setShowModal } from "../../store/cartSlice";
 

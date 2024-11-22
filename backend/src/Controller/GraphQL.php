@@ -173,6 +173,51 @@ class GraphQL {
                                     }],
                 ]
             ]);
+
+            // Define OrderItemType
+            $orderItemType = new ObjectType([
+                'name' => 'OrderItem',
+                'fields' => [
+                    'product_id' => ['type' => Type::nonNull(Type::string())],
+                    'quantity' => ['type' => Type::nonNull(Type::int())],
+                    'price' => ['type' => Type::nonNull(Type::float())],
+                ]
+            ]);
+
+            // Define OrderType with name and phone_number
+            $orderType = new ObjectType([
+                'name' => 'Order',
+                'fields' => [
+                    'id' => ['type' => Type::nonNull(Type::int())],
+                    'name' => ['type' => Type::nonNull(Type::string())],
+                    'phone_number' => ['type' => Type::nonNull(Type::string())],
+                    'total' => ['type' => Type::nonNull(Type::float())],
+                    'created_at' => ['type' => Type::nonNull(Type::string())],
+                    'items' => ['type' => Type::listOf($orderItemType)],
+                ]
+            ]);
+
+            // Define OrderInputType with name and phone_number
+            $orderItemInputType = new InputObjectType([
+                'name' => 'OrderItemInput',
+                'fields' => [
+                    'product_id' => ['type' => Type::nonNull(Type::string())],
+                    'quantity' => ['type' => Type::nonNull(Type::int())],
+                    'price' => ['type' => Type::nonNull(Type::float())],
+                ]
+            ]);
+
+            $orderInputType = new InputObjectType([
+                'name' => 'OrderInput',
+                'fields' => [
+                    'name' => ['type' => Type::nonNull(Type::string())],
+                    'phone_number' => ['type' => Type::nonNull(Type::string())],
+                    'items' => ['type' => Type::nonNull(Type::listOf($orderItemInputType))],
+                    'total' => ['type' => Type::nonNull(Type::float())],
+                ]
+            ]);
+
+
             
             $queryType = new ObjectType([
                 'name' => 'Query',
@@ -278,16 +323,161 @@ class GraphQL {
                             return $category;
                         }
                     ],
+                    'order' => [
+                            'type' => $orderType,
+                            'args' => [
+                                'id' => Type::nonNull(Type::int())
+                            ],
+                            'resolve' => function($root, $args) {
+                                $conn = self::getDatabaseConnection();
+                                $order_id = $args['id'];
+
+                                // Fetch order
+                                $stmt = $conn->prepare("SELECT * FROM orders WHERE id = ?");
+                                if (!$stmt) {
+                                    throw new RuntimeException("Prepare failed: " . $conn->error);
+                                }
+                                $stmt->bind_param("i", $order_id);
+                                if (!$stmt->execute()) {
+                                    throw new RuntimeException("Execute failed: " . $stmt->error);
+                                }
+                                $result = $stmt->get_result();
+                                $order = $result->fetch_assoc();
+                                $stmt->close();
+
+                                if (!$order) {
+                                    throw new RuntimeException("Order with id {$order_id} not found.");
+                                }
+
+                                // Fetch order items
+                                $stmt = $conn->prepare("SELECT product_id, quantity, price FROM order_items WHERE order_id = ?");
+                                if (!$stmt) {
+                                    throw new RuntimeException("Prepare failed: " . $conn->error);
+                                }
+                                $stmt->bind_param("i", $order_id);
+                                if (!$stmt->execute()) {
+                                    throw new RuntimeException("Execute failed: " . $stmt->error);
+                                }
+                                $result = $stmt->get_result();
+                                $order_items = [];
+                                while ($row = $result->fetch_assoc()) {
+                                    $order_items[] = $row;
+                                }
+                                $stmt->close();
+                                $conn->close();
+
+                                // Attach items to order
+                                $order['items'] = $order_items;
+
+                                return $order;
+                            }
+                        ],
                         
                 ]
             ]);
 
-           
+           $mutationType = new ObjectType([
+                            'name' => 'Mutation',
+                            'fields' => [
+                                'createOrder' => [
+                                    'type' => $orderType,
+                                    'args' => [
+                                        'input' => ['type' => Type::nonNull($orderInputType)]
+                                    ],
+                                    'resolve' => function($root, $args) {
+                                        $conn = self::getDatabaseConnection();
+                                        $input = $args['input'];
+                                        $name = $input['name'];
+                                        $phone_number = $input['phone_number'];
+                                        $total = $input['total'];
+                                        $items = $input['items'];
+
+                                        // Begin Transaction
+                                        $conn->begin_transaction();
+
+                                        try {
+                                            // Insert into orders table with name and phone_number
+                                            $stmt = $conn->prepare("INSERT INTO orders (name, phone_number, total, created_at) VALUES (?, ?, ?, NOW())");
+                                            if (!$stmt) {
+                                                throw new RuntimeException("Prepare failed: " . $conn->error);
+                                            }
+                                            $stmt->bind_param("sd", $name, $phone_number, $total);
+                                            if (!$stmt->execute()) {
+                                                throw new RuntimeException("Execute failed: " . $stmt->error);
+                                            }
+                                            $order_id = $stmt->insert_id;
+                                            $stmt->close();
+
+                                            // Insert into order_items table
+                                            $stmt = $conn->prepare("INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (?, ?, ?, ?)");
+                                            if (!$stmt) {
+                                                throw new RuntimeException("Prepare failed: " . $conn->error);
+                                            }
+
+                                            foreach ($items as $item) {
+                                                $product_id = $item['product_id'];
+                                                $quantity = $item['quantity'];
+                                                $price = $item['price'];
+                                                $stmt->bind_param("isid", $order_id, $product_id, $quantity, $price);
+                                                if (!$stmt->execute()) {
+                                                    throw new RuntimeException("Execute failed: " . $stmt->error);
+                                                }
+                                            }
+                                            $stmt->close();
+
+                                            // Commit Transaction
+                                            $conn->commit();
+
+                                            // Fetch the created order to return
+                                            $stmt = $conn->prepare("SELECT * FROM orders WHERE id = ?");
+                                            if (!$stmt) {
+                                                throw new RuntimeException("Prepare failed: " . $conn->error);
+                                            }
+                                            $stmt->bind_param("i", $order_id);
+                                            if (!$stmt->execute()) {
+                                                throw new RuntimeException("Execute failed: " . $stmt->error);
+                                            }
+                                            $result = $stmt->get_result();
+                                            $order = $result->fetch_assoc();
+                                            $stmt->close();
+
+                                            // Fetch order items
+                                            $stmt = $conn->prepare("SELECT product_id, quantity, price FROM order_items WHERE order_id = ?");
+                                            if (!$stmt) {
+                                                throw new RuntimeException("Prepare failed: " . $conn->error);
+                                            }
+                                            $stmt->bind_param("i", $order_id);
+                                            if (!$stmt->execute()) {
+                                                throw new RuntimeException("Execute failed: " . $stmt->error);
+                                            }
+                                            $result = $stmt->get_result();
+                                            $order_items = [];
+                                            while ($row = $result->fetch_assoc()) {
+                                                $order_items[] = $row;
+                                            }
+                                            $stmt->close();
+                                            $conn->close();
+
+                                            // Attach items to order
+                                            $order['items'] = $order_items;
+
+                                            return $order;
+
+                                        } catch (Exception $e) {
+                                            // Rollback Transaction on Error
+                                            $conn->rollback();
+                                            $conn->close();
+                                            throw new RuntimeException("Transaction failed: " . $e->getMessage());
+                                        }
+                                    }
+                                ]
+                            ]
+                        ]);
 
             $schema = new Schema(
                 (new SchemaConfig())
                     ->setQuery($queryType)
-                 
+                    ->setMutation($mutationType)     
             );
 
             $rawInput = file_get_contents('php://input');

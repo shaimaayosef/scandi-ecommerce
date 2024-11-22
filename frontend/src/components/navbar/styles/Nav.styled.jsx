@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+ 
 export const NavStyle = styled.div`
   nav {
     z-index: 50;

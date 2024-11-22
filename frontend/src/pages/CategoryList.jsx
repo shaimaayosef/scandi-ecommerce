@@ -6,28 +6,32 @@ import { getCategory } from "../store/categoriesSlice";
 
 class Category extends Component {
   componentDidMount() {
-    this.props.client
-      .query({
-        query: GET_CategoryByName,
-        variables: {
-          name: this.props.match.params.category || "all" ,
-        },
-      })
-      .then((result) => this.props.getCategory(result.data));
+    this.fetchCategory();
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.category !== this.props.match.params.category) {
-      this.props.client
-        .query({
-          query: GET_CategoryByName,
-          variables: {
-            name:  this.props.match.params.category || "all" ,
-          },
-        })
-        .then((result) => this.props.getCategory(result.data.category));
+      this.fetchCategory();
     }
   }
+
+  fetchCategory = () => {
+    const categoryName = this.props.match.params.category || "all";
+    this.props.client
+      .query({
+        query: GET_CategoryByName,
+        variables: {
+          name: categoryName,
+        },
+      })
+      .then((result) => {
+        this.props.getCategory(result.data.category);
+      })
+      .catch((error) => {
+        console.error("Error fetching category:", error);
+      });
+  };
+
 
   render() {
     return (
