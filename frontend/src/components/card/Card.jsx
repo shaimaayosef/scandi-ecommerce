@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component } from "react";
 import { Link } from "react-router-dom";
 import { CardStyel } from "./styles/card.styled";
 import ProCartSvg from "../../assets/Empty Cart.svg";
@@ -64,7 +64,6 @@ class Card extends Component {
   }
 
   render() {
-  
     return (
       <CardStyel>
         <div className="pro-card">
@@ -102,7 +101,6 @@ class Card extends Component {
     );
   }
 }
-
 
 const mapStateToProps = (state) => ({
   cartItems: state.cart.cartItems,

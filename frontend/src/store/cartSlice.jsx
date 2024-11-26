@@ -45,7 +45,6 @@ export const cartSlice = createSlice({
       const id = action.payload;
       state.cartItems.splice(id, 1);
     },
-    
   },
 });
 

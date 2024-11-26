@@ -1,12 +1,10 @@
-import { createRoot } from 'react-dom/client'
+import { createRoot } from "react-dom/client";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { BrowserRouter as Router } from "react-router-dom";
-import './index.css'
-import App from './App.jsx'
+import "./index.css";
+import App from "./App.jsx";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
-
-
 
 // Initialize Apollo Client
 const client = new ApolloClient({
@@ -16,13 +14,12 @@ const client = new ApolloClient({
   }),
 });
 
-createRoot(document.getElementById('root')).render(
+createRoot(document.getElementById("root")).render(
   <ApolloProvider client={client}>
-     <Provider store={store}>
-    <Router   future={{ v7_relativeSplatPath: true ,v7_startTransition :true}}>
-    <App client={client}/>
-    </Router>
+    <Provider store={store}>
+      <Router future={{ v7_relativeSplatPath: true, v7_startTransition: true }}>
+        <App client={client} />
+      </Router>
     </Provider>
   </ApolloProvider>
-
-)
+);

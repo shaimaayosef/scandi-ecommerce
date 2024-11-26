@@ -1,4 +1,3 @@
-
 import { useQuery } from "@apollo/client";
 import { GET_ProductById } from "./queries";
 

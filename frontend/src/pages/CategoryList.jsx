@@ -32,7 +32,6 @@ class Category extends Component {
       });
   };
 
-
   render() {
     return (
       <>
@@ -45,7 +44,6 @@ class Category extends Component {
     );
   }
 }
-
 
 const mapStateToProps = (state) => ({
   category: state.categories.category,

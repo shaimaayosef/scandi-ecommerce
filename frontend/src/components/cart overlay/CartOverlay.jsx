@@ -26,11 +26,7 @@ class CartOverlay extends Component {
           <div className="cart-overlay">
             {this.props.cartItems.length > 0 ? (
               this.props.cartItems.map((item, i) => (
-                <CartItem
-                  key={i}
-                  item={item}
-                  id={i}
-                />
+                <CartItem key={i} item={item} id={i} />
               ))
             ) : (
               <p>cart is empty</p>
@@ -39,17 +35,14 @@ class CartOverlay extends Component {
           {this.props.cartItems.length > 0 && (
             <>
               <p>
-                Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Total  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 <span>
                   {this.props.cartItems.length > 0 &&
                     this.props.cartItems
                       .reduce(
-                        (acc, item) =>
-                          acc +
-                          item.price[0]?.amount *
-                            item.qty,
+                        (acc, item) => acc + item.price[0]?.amount * item.qty,
                         0
                       )
                       .toFixed(2)}

@@ -10,46 +10,9 @@ export const ProductViewStyle = styled.div`
     padding: 10px;
     display: flex;
     margin-top: 20px;
-    .product-images {
-      display: flex;
-      flex-direction: column;
-      img {
-        object-fit: scale-down;
-        width: 100px;
-        height: 100px;
-        margin-right: 60px;
-        margin-bottom: 40px;
-        cursor: pointer;
-      }
-    }
-    .Photo-Gallery {
-      margin-right: 50px;
-      position: relative;
-      .outStock {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 700px;
-        height: 600px;
-        background-color: rgba(255, 255, 255, 0.5);
-        p {
-          text-transform: uppercase;
-          font-weight: 400;
-          font-size: 40px;
-          line-height: 160%;
-          font-family: "Raleway";
-          color: #8d8f9a;
-        }
-      }
-      img {
-        object-fit: scale-down;
-        width: 700px;
-        height: 600px;
-      }
-    }
+    display: flex;
+    gap: 20px;
+justify-content    :space-between ;
     .product-info {
       width: 520px;
       height: 595px;
@@ -198,3 +161,4 @@ export const ProductViewStyle = styled.div`
     }
   }
 `;
+

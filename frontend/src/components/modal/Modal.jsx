@@ -8,7 +8,6 @@ import {
   setActiveCategory,
 } from "../../store/cartSlice";
 
-
 class Modal extends Component {
   render() {
     return (
@@ -20,7 +19,7 @@ class Modal extends Component {
               <p>Waiting for you again soon</p>
             </div>
             <div className="modal-footer">
-            <Link
+              <Link
                 to="/"
                 onClick={() => {
                   this.props.setShowModal(false);
@@ -39,7 +38,6 @@ class Modal extends Component {
     );
   }
 }
-
 
 const mapStateToProps = (state) => ({
   showModal: state.cart.showModal,

@@ -1,13 +1,10 @@
-import { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Component } from "react";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { NavStyle } from "./styles/Nav.styled.jsx";
 import logotSvg from "../../assets/a-logo.svg";
 import cartSvg from "../../assets/EmptyCart.svg";
-import {
-  setShowCart,
-  setActiveCategory,
-} from "../../store/cartSlice.jsx";
+import { setShowCart, setActiveCategory } from "../../store/cartSlice.jsx";
 
 class Navbar extends Component {
   handleItemClick(index) {
@@ -32,6 +29,7 @@ class Navbar extends Component {
                   }`}
                 >
                   <li
+                    data-testid="category-link"
                     className={
                       this.props.activeCategory === index ? "active" : ""
                     }
@@ -76,8 +74,6 @@ class Navbar extends Component {
     );
   }
 }
-
-
 
 const mapStateToProps = (state) => ({
   showCart: state.cart.showCart,

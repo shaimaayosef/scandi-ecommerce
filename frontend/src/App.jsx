@@ -1,15 +1,13 @@
-import { Component } from 'react';
+import { Component } from "react";
 import { Routes, Route, useParams } from "react-router-dom";
-import Navbar from './components/navbar/Navbar.jsx';
-import CartOverlay from './components/cart overlay/CartOverlay.jsx';
-import ProductDescriptionPage from "./pages/ProductDescriptionPage.jsx"
+import Navbar from "./components/navbar/Navbar.jsx";
+import CartOverlay from "./components/cart overlay/CartOverlay.jsx";
+import ProductDescriptionPage from "./pages/ProductDescriptionPage.jsx";
 import { GET_CATEGORIES } from "./queries.jsx";
-import { connect } from 'react-redux';
-import { getCategories} from "./store/categoriesSlice";
-import Modal from "./components/modal/Modal.jsx"
-import CategoryList from "./pages/CategoryList.jsx"
-import OrderConfirmation from './pages/OrderConfirmation/OrderConfirmation.jsx';
-import OrderDetails from './pages/OrderDetails/OrderDetails.jsx';
+import { connect } from "react-redux";
+import { getCategories } from "./store/categoriesSlice";
+import Modal from "./components/modal/Modal.jsx";
+import CategoryList from "./pages/CategoryList.jsx";
 
 
 class App extends Component {
@@ -26,23 +24,22 @@ class App extends Component {
       });
   }
   render() {
-  
-      const Wrapper = (props) => {
-        const params = useParams();
-        return (
-          <ProductDescriptionPage
-            {...{ ...props, match: { params }, client: this.props.client }}
-          />
-        );
-      };
-      const CategoryWrapper = (props) => {
-        const params = useParams();
-        return (
-          <CategoryList
-            {...{ ...props, match: { params }, client: this.props.client }}
-          />
-        );
-      };
+    const Wrapper = (props) => {
+      const params = useParams();
+      return (
+        <ProductDescriptionPage
+          {...{ ...props, match: { params }, client: this.props.client }}
+        />
+      );
+    };
+    const CategoryWrapper = (props) => {
+      const params = useParams();
+      return (
+        <CategoryList
+          {...{ ...props, match: { params }, client: this.props.client }}
+        />
+      );
+    };
     return (
       <div>
         <Navbar categories={this.props.categories} />
@@ -54,8 +51,6 @@ class App extends Component {
               <Route path="/" element={<CategoryWrapper />} />
               <Route path="/:category" element={<CategoryWrapper />} />
               <Route path="/description/:id" element={<Wrapper />} />
-              <Route path="/order-confirmation" element={<OrderConfirmation/>} />
-              <Route path="/order-details/:orderId" element={<OrderDetails/>} />
             </Routes>
           ) : (
             <p>loading...</p>

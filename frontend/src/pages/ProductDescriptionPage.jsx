@@ -3,7 +3,6 @@ import ProductView from "../components/product view/ProductView";
 import { connect } from "react-redux";
 import { GET_ProductById } from "../queries";
 
-
 class ProductDescriptionPage extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +17,7 @@ class ProductDescriptionPage extends Component {
         query: GET_ProductById,
         variables: { id: this.props.match.params.id },
       })
-      .then((result) => this.setState({ product: result.data.product })); 
+      .then((result) => this.setState({ product: result.data.product }));
   }
 
   render() {
@@ -33,7 +32,6 @@ class ProductDescriptionPage extends Component {
     );
   }
 }
-
 
 const mapStateToProps = (state) => ({
   categories: state.categories.categories,

@@ -4,23 +4,18 @@ import { connect } from "react-redux";
 import { addToCart, updateCart } from "../../store/cartSlice";
 import { EditorState, Editor } from "draft-js";
 import { convertFromHTML } from "draft-convert";
+import PhotoGallery from "./PhotoGallery";
 
 class ProductView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      src: this.props.product.gallery[0].image_url,
+      currentIndex: 0,
+      src: props.product.gallery[0].image_url,
       selectedAttributes: {},
       selectedColor: 0,
       editorState: EditorState.createEmpty(),
     };
-  }
-
-  changeImg(src) {
-    this.setState((prevState) => ({
-      ...prevState,
-      src: src,
-    }));
   }
 
   getRndInteger(min, max) {
@@ -94,35 +89,17 @@ class ProductView extends Component {
     localStorage.setItem("cartItems", JSON.stringify(this.props.cartItems));
   }
 
-  renderGallery() {
-    return this.props.product.gallery.map((image, index) => (
-      <img
-        key={index}
-        src={image.image_url}
-        alt={`Product image ${index + 1}`}
-        onClick={() => this.changeImg(image.image_url)}
-      />
-    ));
-  }
-
   render() {
     const price = this.props.product.price[0]; // Access the first price object
 
     return (
       <ProductViewStyle>
         <div className="ProductView">
-          <div className="product-images">
-            {this.renderGallery()}
-          </div>
-
-          <div className="Photo-Gallery">
-            {this.props.product.inStock || (
-              <div className="outStock">
-                <p> out of stock</p>
-              </div>
-            )}
-            <img src={this.state.src} alt={this.props.product.name} />
-          </div>
+          <PhotoGallery
+            className="product-images"
+            product={this.props.product}
+            renderGallery={this.renderGallery}
+          />
           <div className="product-info">
             <h2>{this.props.product.brand}</h2>
             <h3>{this.props.product.name}</h3>
