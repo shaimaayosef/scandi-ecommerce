@@ -94,7 +94,9 @@ class CartItem extends Component {
                 .filter((a) => a.id === "Color")
                 .map((d, i) => (
                   <div className="color" key={i}>
-                    <h4 data-testid="cart-item-attribute-${attribute name in kebab case}-${attribute name in kebab case}">{d.id}:</h4>
+                    <h4 data-testid="cart-item-attribute-${attribute name in kebab case}-${attribute name in kebab case}">
+                      {d.id}:
+                    </h4>
                     <div className="color-box">
                       {d.items.map((color, i) => (
                         <div

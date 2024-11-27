@@ -4,7 +4,7 @@
 $servername = "localhost";
 $username = "scandiAdmin";
 $password = "1234";
-$dbname = "scandish";
+$dbname = "scandishhh";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -108,7 +108,32 @@ if ($conn->query($sql) === TRUE) {
     echo "Error creating table: " . $conn->error . "\n";
 }
 
-$conn->close();
+// create orders table
+$sql = "CREATE TABLE IF NOT EXISTS orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    total_price DECIMAL(10, 2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+if ($conn->query($sql) === TRUE) {
+    echo "Table orders created successfully\n";
+} else {
+    echo "Error creating table: " . $conn->error . "\n";
+}
 
-//CREATE TABLE orders (id INT AUTO_INCREMENT PRIMARY KEY,total_price DECIMAL(10, 2) NOT NULL,created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
-// CREATE TABLE order_products (id INT AUTO_INCREMENT PRIMARY KEY,order_id INT NOT NULL,product_id VARCHAR(255) NOT NULL,product_name VARCHAR(255) NOT NULL,price DECIMAL(10, 2) NOT NULL,quantity INT NOT NULL,FOREIGN KEY (order_id) REFERENCES orders(id));
+// create order_products table
+$sql = "CREATE TABLE IF NOT EXISTS order_products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id VARCHAR(255) NOT NULL,
+    product_name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    quantity INT NOT NULL,
+    FOREIGN KEY (order_id) REFERENCES orders(id)
+)";
+if ($conn->query($sql) === TRUE) {
+    echo "Table order_products created successfully\n";
+} else {
+    echo "Error creating table: " . $conn->error . "\n";
+}
+
+$conn->close();

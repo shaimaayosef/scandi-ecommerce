@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "scandiAdmin";
 $password = "1234";
-$dbname = "scandish";
+$dbname = "scandishhh";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -23,7 +23,9 @@ $tables = [
     'product_attributes',
     'product_prices',
     'products',
-    'categories'
+    'categories',
+    'orders',
+    'order_products'
 ];
 
 // Clear all tables
@@ -72,6 +74,10 @@ $stmtPrice = $conn->prepare("INSERT INTO product_prices (product_id, amount, cur
 $stmtAttr = $conn->prepare("INSERT INTO product_attributes (id, product_id, attribute_name, attribute_type) VALUES (?, ?, ?, ?)");
 $stmtAttrItem = $conn->prepare("INSERT INTO product_attribute_items (product_id, attribute_name, display_value, value, item_id) VALUES (?, ?, ?, ?, ?)");
 $stmtGallery = $conn->prepare("INSERT INTO product_gallery (product_id, image_url) VALUES (?, ?)");
+
+$stmtOrder = $conn->prepare("INSERT INTO orders (total_price) VALUES (NULL)");
+$stmtOrderProduct = $conn->prepare("INSERT INTO order_products (order_id, product_id, product_name, price, quantity) VALUES (NULL, NULL, NULL, NULL, NULL)");
+
 
 foreach ($data['data']['products'] as $index => $product) {
     echo "Processing product " . ($index + 1) . " of " . count($data['data']['products']) . "\n";
@@ -126,7 +132,13 @@ foreach ($data['data']['products'] as $index => $product) {
 
     echo "Finished processing product: {$product['name']} (ID: {$product['id']})\n";
 }
-
+// Insert null data for orders and order_products
+if (!$stmtOrder->execute()) {
+    echo "Error inserting order: " . $stmtOrder->error . "\n";
+}
+if (!$stmtOrderProduct->execute()) {
+    echo "Error inserting order product: " . $stmtOrderProduct->error . "\n";
+}
 
 $stmtProduct->close();
 $stmtPrice->close();

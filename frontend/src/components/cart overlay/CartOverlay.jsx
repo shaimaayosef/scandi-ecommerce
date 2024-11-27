@@ -3,23 +3,27 @@ import { ApolloConsumer } from "@apollo/client";
 import CartItem from "./CartItem";
 import { CartOverlayStyle } from "./styles/cartOverlay.styled";
 import { PLACE_ORDER_MUTATION } from "../../queries";
- 
+
 import { connect } from "react-redux";
 import { setShowCart, setShowModal } from "../../store/cartSlice";
 
 class CartOverlay extends Component {
   gatherProductInfo = () => {
-    const productInfo = this.props.cartItems.map(item => ({
+    const productInfo = this.props.cartItems.map((item) => ({
       id: item.id,
       name: item.name,
       price: item.price[0]?.amount,
-      quantity: item.qty, 
+      quantity: item.qty,
     }));
     return productInfo;
-  } 
-  
+  };
+
   handlePlaceOrder = async (client) => {
-    const total = parseFloat(this.props.cartItems.reduce((acc, item) => acc + item.price[0]?.amount * item.qty, 0).toFixed(2));
+    const total = parseFloat(
+      this.props.cartItems
+        .reduce((acc, item) => acc + item.price[0]?.amount * item.qty, 0)
+        .toFixed(2)
+    );
     const products = this.gatherProductInfo();
     try {
       // Execute the GraphQL mutation to place an order
@@ -46,7 +50,7 @@ class CartOverlay extends Component {
   render() {
     return (
       <ApolloConsumer>
-        {client => (
+        {(client) => (
           <>
             <div
               className="overlay"
@@ -57,7 +61,10 @@ class CartOverlay extends Component {
                 My Bag, &nbsp;
                 <span>
                   <span className="bold">
-                    {this.props.cartItems.reduce((acc, item) => acc + item.qty, 0)}
+                    {this.props.cartItems.reduce(
+                      (acc, item) => acc + item.qty,
+                      0
+                    )}
                   </span>
                   &nbsp; items
                 </span>
@@ -74,14 +81,16 @@ class CartOverlay extends Component {
               {this.props.cartItems.length > 0 && (
                 <>
                   <p>
-                    Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    &nbsp; &nbsp; &nbsp;
                     <span data-testid="cart-total">
                       {this.props.cartItems.length > 0 &&
                         this.props.cartItems
                           .reduce(
-                            (acc, item) => acc + item.price[0]?.amount * item.qty,
+                            (acc, item) =>
+                              acc + item.price[0]?.amount * item.qty,
                             0
                           )
                           .toFixed(2)}

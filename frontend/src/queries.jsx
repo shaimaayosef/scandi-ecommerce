@@ -85,4 +85,3 @@ export const PLACE_ORDER_MUTATION = gql`
     placeOrder(orderData: $orderData)
   }
 `;
-
