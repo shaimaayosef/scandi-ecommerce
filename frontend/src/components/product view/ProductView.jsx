@@ -103,65 +103,70 @@ class ProductView extends Component {
           <div className="product-info">
             <h2>{this.props.product.brand}</h2>
             <h3>{this.props.product.name}</h3>
-            {this.props.product.attributes
-              .filter((atr) => atr.id !== "Color")
-              .map((d, i) => (
-                <div className="size" key={i}>
-                  <h4>{d.id}:</h4>
-                  <div className="size-box">
-                    {d.items.map((size, i) => (
-                      <div
-                        key={i}
-                        className={`size-x ${
-                          this.state.selectedAttributes[d.id] === i
-                            ? "selected"
-                            : ""
-                        } ${
-                          this.state.selectedAttributes[d.id] === undefined &&
-                          i === 0
-                            ? "selected"
-                            : ""
-                        }`}
-                        onClick={() => {
-                          this.setState((prevState) => ({
-                            ...prevState,
-                            selectedAttributes: {
-                              ...prevState.selectedAttributes,
-                              [d.id]: i,
-                            },
-                          }));
-                        }}
-                      >
-                        {size.value}
-                      </div>
-                    ))}
+            <div
+              className="attributes-container"
+              data-testid="product-attribute-${attribute in kebab case}"
+            >
+              {this.props.product.attributes
+                .filter((atr) => atr.id !== "Color")
+                .map((d, i) => (
+                  <div className="size" key={i}>
+                    <h4>{d.id}:</h4>
+                    <div className="size-box">
+                      {d.items.map((size, i) => (
+                        <div
+                          key={i}
+                          className={`size-x ${
+                            this.state.selectedAttributes[d.id] === i
+                              ? "selected"
+                              : ""
+                          } ${
+                            this.state.selectedAttributes[d.id] === undefined &&
+                            i === 0
+                              ? "selected"
+                              : ""
+                          }`}
+                          onClick={() => {
+                            this.setState((prevState) => ({
+                              ...prevState,
+                              selectedAttributes: {
+                                ...prevState.selectedAttributes,
+                                [d.id]: i,
+                              },
+                            }));
+                          }}
+                        >
+                          {size.value}
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            {this.props.product.attributes
-              .filter((a) => a.id === "Color")
-              .map((d, i) => (
-                <div className="color" key={i}>
-                  <h4>Color:</h4>
-                  <div className="color-box">
-                    {d.items.map((color, i) => (
-                      <div
-                        key={i}
-                        className={`color-x ${
-                          this.state.selectedColor === i ? "selected" : ""
-                        }`}
-                        style={{ backgroundColor: `${color.value}` }}
-                        onClick={() => {
-                          this.setState((prevState) => ({
-                            ...prevState,
-                            selectedColor: i,
-                          }));
-                        }}
-                      ></div>
-                    ))}
+                ))}
+              {this.props.product.attributes
+                .filter((a) => a.id === "Color")
+                .map((d, i) => (
+                  <div className="color" key={i}>
+                    <h4>Color:</h4>
+                    <div className="color-box">
+                      {d.items.map((color, i) => (
+                        <div
+                          key={i}
+                          className={`color-x ${
+                            this.state.selectedColor === i ? "selected" : ""
+                          }`}
+                          style={{ backgroundColor: `${color.value}` }}
+                          onClick={() => {
+                            this.setState((prevState) => ({
+                              ...prevState,
+                              selectedColor: i,
+                            }));
+                          }}
+                        ></div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+            </div>
             <div className="price">
               <h4 className="price">price:</h4>
               <span>
@@ -170,13 +175,17 @@ class ProductView extends Component {
               </span>
             </div>
             {this.props.product.inStock ? (
-              <button className="add" onClick={() => this.addProToCart()}>
+              <button
+                className="add"
+                onClick={() => this.addProToCart()}
+                data-testid="add-to-cart"
+              >
                 add to card
               </button>
             ) : (
               <p className="out">out of stock</p>
             )}
-            <div className="descreption">
+            <div className="descreption" data-testid="product-description">
               <Editor editorState={this.state.editorState} />
             </div>
           </div>

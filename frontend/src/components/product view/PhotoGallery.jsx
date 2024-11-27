@@ -45,8 +45,8 @@ class PhotoGallery extends React.Component {
   render() {
     return (
       <PhotoGalleryStyle>
-        <div className="product-images">
-          <div className="Photo-icons">
+        <div className="product-images" data-testid="product-gallery">
+          <div className="Photo-thumbinals">
             {this.props.product.gallery.map((image, index) => (
               <div key={index} className="image">
                 <img

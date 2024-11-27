@@ -66,7 +66,10 @@ class Card extends Component {
   render() {
     return (
       <CardStyel>
-        <div className="pro-card">
+        <div
+          className="pro-card"
+          data-testid="product-${product name in kebab case}"
+        >
           {this.props.product.inStock || (
             <Link to={`/description/${this.props.product.id}`}>
               <div className="outStock">

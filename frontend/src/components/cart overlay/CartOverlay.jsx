@@ -35,10 +35,10 @@ class CartOverlay extends Component {
           {this.props.cartItems.length > 0 && (
             <>
               <p>
-                Total  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                Total &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <span>
+                <span data-testid="cart-total">
                   {this.props.cartItems.length > 0 &&
                     this.props.cartItems
                       .reduce(

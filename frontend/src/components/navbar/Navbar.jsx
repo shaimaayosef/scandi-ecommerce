@@ -27,9 +27,13 @@ class Navbar extends Component {
                   className={`nav-links ${
                     this.props.activeCategory === index ? "active" : ""
                   }`}
+                  data-testid={
+                    this.props.activeCategory === index
+                      ? "active-category-link"
+                      : "category-link"
+                  }
                 >
                   <li
-                    data-testid="category-link"
                     className={
                       this.props.activeCategory === index ? "active" : ""
                     }
@@ -66,6 +70,7 @@ class Navbar extends Component {
                 alt="cart logo"
                 className="cart-img"
                 onClick={() => this.props.setShowCart(!this.props.showCart)}
+                data-testid="cart-btn"
               />
             </div>
           </div>

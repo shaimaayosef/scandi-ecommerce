@@ -57,12 +57,17 @@ class CartItem extends Component {
                 {price.amount}
               </span>
             </div>
-            <div className="attributes">
+            <div
+              className="attributes"
+              data-testid="cart-item-attribute-${attribute name in kebab case}"
+            >
               {this.props.item.attributes
                 .filter((atr) => atr.id !== "Color")
                 .map((d, i) => (
                   <div className="size" key={i}>
-                    <h4>{d.id}:</h4>
+                    <h4 data-testid="cart-item-attribute-${attribute name in kebab case}-${attribute name in kebab case}">
+                      {d.id}:
+                    </h4>
                     <div className="size-box">
                       {d.items.map((size, i) => (
                         <div
@@ -77,6 +82,7 @@ class CartItem extends Component {
                               ? "selected"
                               : ""
                           }`}
+                          data-testid="cart-item-attribute-${attribute name in kebab case}-${attribute name in kebab case}-selected"
                         >
                           {size.value}
                         </div>
@@ -115,6 +121,7 @@ class CartItem extends Component {
                 onClick={() => {
                   this.props.updateCart(this.props.item.key);
                 }}
+                data-testid="cart-item-amount-increase"
               />
             </div>
             <span>{this.props.item.qty}</span>
@@ -123,6 +130,7 @@ class CartItem extends Component {
                 src={MinusSvg}
                 alt="minus"
                 onClick={() => this.removeItem()}
+                data-testid="cart-item-amount-decrease"
               />
             </div>
           </div>
