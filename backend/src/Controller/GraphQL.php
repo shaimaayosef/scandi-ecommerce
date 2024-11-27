@@ -189,8 +189,22 @@ class GraphQL
                 ]
             ]);
 
-
-
+            // Define Order Input Type
+            $orderInputType = new InputObjectType([
+                'name' => 'OrderInput',
+                'fields' => [
+                    'total' => Type::float(), // Change 'totalPrice' to 'total'
+                    'products' => Type::listOf(new InputObjectType([
+                        'name' => 'ProductInput',
+                        'fields' => [
+                            'id' => Type::string(),
+                            'name' => Type::string(), // Add 'name' field
+                            'price' => Type::float(),
+                            'quantity' => Type::int(),
+                        ],
+                    ])),
+                ],
+            ]);
 
             $queryType = new ObjectType([
                 'name' => 'Query',
@@ -301,11 +315,49 @@ class GraphQL
                 ]
             ]);
 
+            // Define the Mutation
+            $mutationType = new ObjectType([
+                'name' => 'Mutation',
+                'fields' => [
+                    'placeOrder' => [
+                        'type' => Type::boolean(),
+                        'args' => [
+                            'orderData' => $orderInputType
+                        ],
+                        'resolve' => function ($root, $args) {
+                            $conn = self::getDatabaseConnection();
+                            // Extracting order data
+                            $orderData = $args['orderData'];
+                            $total = $orderData['total']; // Change 'totalPrice' to 'total'
+                            $products = $orderData['products'];
+
+                            // Insert Order Data into MySQL Database
+                            $stmt = $conn->prepare("INSERT INTO orders (total_price) VALUES (?)");
+                            $stmt->bind_param("d", $total);
+                            $stmt->execute();
+                            $orderId = $stmt->insert_id;
+                            $stmt->close();
+
+                            // Insert Products Data
+                            foreach ($products as $product) {
+                                $stmt = $conn->prepare("INSERT INTO order_products (order_id, product_id, product_name, price, quantity) VALUES (?, ?, ?, ?, ?)");
+                                $stmt->bind_param("issdi", $orderId, $product['id'], $product['name'], $product['price'], $product['quantity']);
+                                $stmt->execute();
+                            }
+                            $stmt->close();
+
+                            return true;
+                        }
+                    ]
+                ],
+            ]);
+
 
 
             $schema = new Schema(
                 (new SchemaConfig())
                     ->setQuery($queryType)
+                    ->setMutation($mutationType)
             );
 
             $rawInput = file_get_contents('php://input');

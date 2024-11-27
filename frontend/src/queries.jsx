@@ -79,39 +79,10 @@ export const GET_ProductById = gql`
     }
   }
 `;
-
-// Mutation to create an order with user info
-export const CREATE_ORDER_WITH_USER_INFO = gql`
-  mutation CreateOrder($input: OrderInput!) {
-    createOrder(input: $input) {
-      id
-      name
-      phone_number
-      total
-      created_at
-      items {
-        product_id
-        quantity
-        price
-      }
-    }
+// GraphQL Mutation for Placing the Order
+export const PLACE_ORDER_MUTATION = gql`
+  mutation PlaceOrder($orderData: OrderInput!) {
+    placeOrder(orderData: $orderData)
   }
 `;
 
-// Query to fetch order details by ID
-export const GET_ORDER_BY_ID = gql`
-  query GetOrderById($id: Int!) {
-    order(id: $id) {
-      id
-      name
-      phone_number
-      total
-      created_at
-      items {
-        product_id
-        quantity
-        price
-      }
-    }
-  }
-`;
