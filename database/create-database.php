@@ -1,10 +1,10 @@
 <?php
 
 // Database connection details
-$servername = "localhost";
-$username = "scandiAdmin";
-$password = "1234";
-$dbname = "scandishhh";
+$servername = "sql203.infinityfree.com";
+$username = "if0_37800070";
+$password = "NL2U1diO1P1iYk";
+$dbname = "if0_37800070_XXX";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);

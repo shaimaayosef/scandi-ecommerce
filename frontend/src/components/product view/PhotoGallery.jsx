@@ -1,6 +1,6 @@
 import React from "react";
-import PrevArrowSvg from "../../assets/Group 1417.svg";
-import AfterArrowSvg from "../../assets/Group 1418.svg";
+import PrevArrowSvg from "../../../public/Group 1417.svg";
+import AfterArrowSvg from "../../../public/Group 1418.svg";
 import { PhotoGalleryStyle } from "./styles/PhotoGallery.styled";
 
 class PhotoGallery extends React.Component {

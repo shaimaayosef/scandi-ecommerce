@@ -1,11 +1,11 @@
 import { Component } from "react";
 import { CartItemStyle } from "./styles/cartOverlay.styled";
-import MinusSvg from "../../assets/minus-squ.svg";
-import AddSvg from "../../assets/plus-squ.svg";
+import MinusSvg from "../../../public/minus-squ.svg";
+import AddSvg from "../../../public/plus-squ.svg";
 import { removeFromCart, updateCart, deletItem } from "../../store/cartSlice";
 import { connect } from "react-redux";
-import PrevArrowSvg from "../../assets/Group 1417.svg";
-import AfterArrowSvg from "../../assets/Group 1418.svg";
+import PrevArrowSvg from "../../../public/Group 1417.svg";
+import AfterArrowSvg from "../../../public/Group 1418.svg";
 
 class CartItem extends Component {
   constructor(props) {

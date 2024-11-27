@@ -2,8 +2,8 @@ import { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { NavStyle } from "./styles/Nav.styled.jsx";
-import logotSvg from "../../assets/a-logo.svg";
-import cartSvg from "../../assets/EmptyCart.svg";
+import logotSvg from "../../../public/a-logo.svg";
+import cartSvg from "../../../public/EmptyCart.svg";
 import { setShowCart, setActiveCategory } from "../../store/cartSlice.jsx";
 
 class Navbar extends Component {

@@ -1,7 +1,7 @@
 import { Component } from "react";
 import { Link } from "react-router-dom";
 import { CardStyel } from "./styles/card.styled";
-import ProCartSvg from "../../assets/Empty Cart.svg";
+import ProCartSvg from "../../../public/Empty Cart.svg";
 import { connect } from "react-redux";
 import { addToCart, updateCart } from "../../store/cartSlice";
 
