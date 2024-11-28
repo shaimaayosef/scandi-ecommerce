@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "scandiAdmin";
 $password = "1234";
-$dbname = "scandishhh";
+$dbname = "scandi4ecommerce";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
