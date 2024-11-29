@@ -27,8 +27,8 @@ To run the project on a local server, follow these steps:
 
 1. Open a terminal in the `database` folder and run the `create-database` and `insert_data` scripts:
     ```sh
-    php create-database.php
-    php insert_data.php
+    php create-database.php //after edit the database connection information in the file
+    php insert_data.php   //after edit the database connection information in the file
     ```
 
 2. Open a terminal in the `backend` folder and run the following commands:
