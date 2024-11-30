@@ -23,9 +23,9 @@ class GraphQL
 {
     private static  function getDatabaseConnection()
     {
-        $servername = "localhost";
-        $username = "scandiAdmin";
-        $password = "1234";
+        $servername = "scandi-db.cp6c6umsmx2q.eu-north-1.rds.amazonaws.com";
+        $username = "admin";
+        $password = "Shimaa6488";
         $dbname = "scandi4ecommerce";
 
         $conn = new \mysqli($servername, $username, $password, $dbname);
