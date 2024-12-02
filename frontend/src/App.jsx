@@ -20,7 +20,7 @@ class App extends Component {
         this.props.getCategories(result.data.categories);
       })
       .catch((error) => {
-        console.error("Error fetching categories:", error);
+        console.error("Error fetching categories:", error.networkError || error.message);
       });
   }
   render() {

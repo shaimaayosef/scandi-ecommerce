@@ -25,11 +25,7 @@
 
 To run the project on a local server, follow these steps:
 
-1. Open a terminal in the `database` folder and run the `create-database` and `insert_data` scripts:
-    ```sh
-    php create-database.php //after edit the database connection information in the file
-    php insert_data.php   //after edit the database connection information in the file
-    ```
+1. database hosted on aws scandi-db.cp6c6umsmx2q.eu-north-1.rds.amazonaws.com
 
 2. Open a terminal in the `backend` folder and run the following commands:
     ```sh
