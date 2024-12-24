@@ -4,7 +4,7 @@ const initialState = {
   cartItems: JSON.parse(localStorage.getItem("cartItems")) || [],
   showCart: false,
   showModal: false,
-  activeCategory: 0,
+  activeCategory: parseInt(localStorage.getItem("activeCategory")) || 0,
 };
 
 export const cartSlice = createSlice({
@@ -19,6 +19,7 @@ export const cartSlice = createSlice({
     },
     setActiveCategory: (state, action) => {
       state.activeCategory = action.payload;
+      localStorage.setItem("activeCategory", action.payload);
     },
     resetCart: (state) => {
       state.cartItems = [];
