@@ -9,6 +9,7 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 require __DIR__ . '/../../vendor/autoload.php';
 
+use App\Models\Database;
 use GraphQL\GraphQL as GraphQLBase;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\InputObjectType;
@@ -21,21 +22,6 @@ use Exception;
 
 class GraphQL
 {
-    private static  function getDatabaseConnection()
-    {
-        $servername = "scandi-db.cp6c6umsmx2q.eu-north-1.rds.amazonaws.com";
-        $username = "admin";
-        $password = "Shimaa6488";
-        $dbname = "scandi4ecommerce";
-
-        $conn = new \mysqli($servername, $username, $password, $dbname);
-
-        if ($conn->connect_error) {
-            throw new RuntimeException("Connection failed: " . $conn->connect_error);
-        }
-
-        return $conn;
-    }
 
     static public function handle()
     {
@@ -60,7 +46,7 @@ class GraphQL
                     'items' => [
                         'type' => Type::listOf($productAttributeItems),
                         'resolve' => function ($productAttributes) {
-                            $conn = self::getDatabaseConnection();
+                            $conn = Database::getDatabaseConnection();
                             $stmt = $conn->prepare("SELECT * FROM product_attribute_items WHERE product_id = ? AND attribute_name = ?");
                             $stmt->bind_param("ss", $productAttributes['product_id'], $productAttributes['attribute_name']);
                             $stmt->execute();
@@ -106,7 +92,7 @@ class GraphQL
                     'gallery' => [
                         'type' => Type::listOf($productGallery),
                         'resolve' => function ($product) {
-                            $conn = self::getDatabaseConnection();
+                            $conn = Database::getDatabaseConnection();
                             $stmt = $conn->prepare("SELECT * FROM product_gallery WHERE product_id = ?");
                             $stmt->bind_param("s", $product['id']);
                             $stmt->execute();
@@ -125,7 +111,7 @@ class GraphQL
                     'attributes' => [
                         'type' => Type::listOf($productAttributes),
                         'resolve' => function ($product) {
-                            $conn = self::getDatabaseConnection();
+                            $conn = Database::getDatabaseConnection();
                             $stmt = $conn->prepare("SELECT * FROM product_attributes WHERE product_id = ?");
                             $stmt->bind_param("s", $product['id']);
                             $stmt->execute();
@@ -142,7 +128,7 @@ class GraphQL
                     'price' => [
                         'type' => Type::listOf($productPrice),
                         'resolve' => function ($product) {
-                            $conn = self::getDatabaseConnection();
+                            $conn = Database::getDatabaseConnection();
                             $stmt = $conn->prepare("SELECT * FROM product_prices WHERE product_id = ?");
                             $stmt->bind_param("s", $product['id']);
                             $stmt->execute();
@@ -168,7 +154,7 @@ class GraphQL
                     'products' => [
                         'type' => Type::listOf($product),
                         'resolve' => function ($category) {
-                            $conn = self::getDatabaseConnection();
+                            $conn = Database::getDatabaseConnection();
                             if ($category['name'] === 'all') {
                                 $stmt = $conn->prepare("SELECT * FROM products");
                             } else {
@@ -212,7 +198,7 @@ class GraphQL
                     'categories' => [
                         'type' => Type::listOf($categoryType),
                         'resolve' => function () {
-                            $conn = self::getDatabaseConnection();
+                            $conn = Database::getDatabaseConnection();
                             $stmt = $conn->prepare("SELECT * FROM categories");
                             if (!$stmt) {
                                 throw new RuntimeException("Prepare failed: " . $conn->error);
@@ -239,7 +225,7 @@ class GraphQL
                             'id' => Type::nonNull(Type::string()) // Argument 'id' is required
                         ],
                         'resolve' => function ($root, $args) {
-                            $conn = self::getDatabaseConnection();
+                            $conn = Database::getDatabaseConnection();
                             $stmt = $conn->prepare("SELECT * FROM products WHERE id = ?");
                             $stmt->bind_param("s", $args['id']);
                             $stmt->execute();
@@ -262,7 +248,7 @@ class GraphQL
                             'name' => Type::nonNull(Type::string())
                         ],
                         'resolve' => function ($root, $args) {
-                            $conn = self::getDatabaseConnection();
+                            $conn = Database::getDatabaseConnection();
                             $stmt = $conn->prepare("SELECT * FROM categories WHERE name = ?");
                             if (!$stmt) {
                                 throw new RuntimeException("Prepare failed: " . $conn->error);
@@ -285,7 +271,7 @@ class GraphQL
 
                             // Fetch products for this category
                             $category['products'] = (function ($categoryName) {
-                                $conn = self::getDatabaseConnection();
+                                $conn = Database::getDatabaseConnection();
                                 $stmt = $conn->prepare("SELECT * FROM products WHERE category = ?");
                                 if (!$stmt) {
                                     throw new RuntimeException("Prepare failed: " . $conn->error);
@@ -325,7 +311,7 @@ class GraphQL
                             'orderData' => $orderInputType
                         ],
                         'resolve' => function ($root, $args) {
-                            $conn = self::getDatabaseConnection();
+                            $conn = Database::getDatabaseConnection();
                             // Extracting order data
                             $orderData = $args['orderData'];
                             $total = $orderData['total']; // Change 'totalPrice' to 'total'
