@@ -241,7 +241,6 @@ class GraphQL
                             return $product;
                         }
                     ],
-
                     'category' => [
                         'type' => $categoryType,
                         'args' => [
@@ -296,8 +295,6 @@ class GraphQL
                             return $category;
                         }
                     ],
-
-
                 ]
             ]);
 
@@ -310,7 +307,7 @@ class GraphQL
                         'args' => [
                             'orderData' => $orderInputType
                         ],
-                        'resolve' => function ($root, $args) {
+                        'resolve' => function ($args) {
                             $conn = Database::getDatabaseConnection();
                             // Extracting order data
                             $orderData = $args['orderData'];
@@ -337,8 +334,6 @@ class GraphQL
                     ]
                 ],
             ]);
-
-
 
             $schema = new Schema(
                 (new SchemaConfig())

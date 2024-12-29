@@ -27,11 +27,11 @@ class OrderModel extends BaseModel {
     }
     
     public function resolve($root, $args = []) {
-        error_log('Received order data: ' . print_r($args, true));
+        // error_log('Received order data: ' . print_r($args, true));
         $conn = Database::getDatabaseConnection();
         // Extracting order data
         $orderData = $args['orderData'];
-        $total = $orderData['total']; 
+        $total = $orderData['total'];
         $products = $orderData['products'];
 
         // Insert Order Data into MySQL Database
@@ -49,7 +49,7 @@ class OrderModel extends BaseModel {
             
         }
         $stmt->close();
-        error_log('Order placed successfully. Order ID: ' . $orderId);
+        // error_log('Order placed successfully. Order ID: ' . $orderId);
         return true;
     }
 }

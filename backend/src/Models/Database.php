@@ -9,7 +9,7 @@ class Database {
     public static  function getDatabaseConnection()
     {
         $servername = "localhost"; //scandi-db.cp6c6umsmx2q.eu-north-1.rds.amazonaws.com"
-        $username = "scandiAdmin"; //admin
+        $username = "root"; //admin
         $password = "1234"; //Shimaa6488
         $dbname = "scandi4ecommerce";
 
