@@ -9,10 +9,8 @@ header("Access-Control-Allow-Headers: Content-Type, Authorization");
 
 require __DIR__ . '/../../vendor/autoload.php';
 
-// use App\Models\Database;
 use App\Models\ProductModel;
 use App\Models\CategoryModel;
-// use App\Models\ProductAttributeModel;
 use App\Models\OrderModel;
 use GraphQL\GraphQL as GraphQLBase;
 use GraphQL\Type\Schema;
@@ -24,16 +22,7 @@ use Throwable;
 
 class GraphQL {
     static public function handle() {
-        // Add CORS headers
-        // header('Access-Control-Allow-Origin: *');
-        // header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-        // header('Access-Control-Allow-Headers: Content-Type, Authorization');
-
-        // Handle preflight request
-        // if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        //     http_response_code(200);
-        //     exit();
-        // }
+        
         try {
             // Initialize models
             $productModel = new ProductModel();
