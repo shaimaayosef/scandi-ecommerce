@@ -8,7 +8,7 @@ import { store } from "./store/store";
 
 // Initialize Apollo Client
 const client = new ApolloClient({
-  uri: "http://localhost:8000/src/Controller/GraphQL.php",   //http://13.60.217.155/src/Controller/GraphQL.php"
+  uri: "http://16.170.218.194/src/Controller/GraphQL.php",   //http://13.60.217.155/src/Controller/GraphQL.php"
   cache: new InMemoryCache({
     dataIdFromObject: (o) => (o._id ? `${o.__typename}:${o._id}` : null),
   }),
