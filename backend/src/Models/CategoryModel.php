@@ -20,7 +20,7 @@ class CategoryModel extends BaseModel {
         ]);
     }
     
-    public function resolve($root, $args = []) {
+    public function resolve($root, $args ) {
         $stmt = $this->conn->prepare("SELECT * FROM categories WHERE name = ?");
         $stmt->bind_param("s", $args['name']);
         $stmt->execute();

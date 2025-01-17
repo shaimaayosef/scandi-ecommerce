@@ -4,8 +4,6 @@ import MinusSvg from "../../../public/minus-squ.svg";
 import AddSvg from "../../../public/plus-squ.svg";
 import { removeFromCart, updateCart, deletItem } from "../../store/cartSlice";
 import { connect } from "react-redux";
-import PrevArrowSvg from "../../../public/Group 1417.svg";
-import AfterArrowSvg from "../../../public/Group 1418.svg";
 
 class CartItem extends Component {
   constructor(props) {
@@ -143,20 +141,6 @@ class CartItem extends Component {
               alt={this.props.item.id}
               className="product-img"
             />
-            <div className="changing-box">
-              <img
-                src={PrevArrowSvg}
-                alt="prev"
-                className="prev"
-                onClick={() => this.previous()}
-              />
-              <img
-                src={AfterArrowSvg}
-                alt="after"
-                className="after"
-                onClick={() => this.after()}
-              />
-            </div>
           </div>
         </div>
       </CartItemStyle>

@@ -57,7 +57,7 @@ class ProductModel extends BaseModel {
         ]);
     }
     
-    public function resolve($root, $args = []) {
+    public function resolve($root, $args) {
         $stmt = $this->conn->prepare("SELECT * FROM products WHERE id = ?");
         $stmt->bind_param("s", $args['id']);
         $stmt->execute();

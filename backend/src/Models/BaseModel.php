@@ -12,7 +12,7 @@ abstract class BaseModel {
     }
     
     abstract public function getGraphQLType();
-    abstract public function resolve($root, $args = []);
+    abstract public function resolve($root, $args );
     
     public function __destruct() {
         if ($this->conn) {

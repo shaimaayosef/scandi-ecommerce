@@ -35,7 +35,7 @@ class ProductAttributeModel extends BaseModel {
         ]);
     }
     
-    public function resolve($root, $args = []) {
+    public function resolve($root, $args ) {
         return $this->resolveForProduct($args['productId']);
     }
     
