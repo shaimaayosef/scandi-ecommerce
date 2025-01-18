@@ -7,8 +7,12 @@ use GraphQL\Type\Definition\Type;
 use RuntimeException;
 
 class ProductModel extends BaseModel {
+    private static $productType = null;
+    private static $galleryType = null;
+    private static $priceType = null;
     public function getGraphQLType() {
-        return new ObjectType([
+        if (self::$productType === null) {
+            self::$productType = new ObjectType([
             'name' => 'Product',
             'fields' => [
                 'id' => ['type' => Type::string()],
@@ -34,9 +38,11 @@ class ProductModel extends BaseModel {
             ]
         ]);
     }
-    
+    return self::$productType;
+}
     private function getGalleryType() {
-        return new ObjectType([
+        if (self::$galleryType === null) {
+            self::$galleryType = new ObjectType([
             'name' => 'ProductGallery',
             'fields' => [
                 'product_id' => ['type' => Type::string()],
@@ -44,9 +50,12 @@ class ProductModel extends BaseModel {
             ]
         ]);
     }
+    return self::$galleryType;
+}
     
     private function getPriceType() {
-        return new ObjectType([
+        if (self::$priceType === null) {
+            self::$priceType = new ObjectType([
             'name' => 'ProductPrice',
             'fields' => [
                 'product_id' => ['type' => Type::string()],
@@ -56,7 +65,8 @@ class ProductModel extends BaseModel {
             ]
         ]);
     }
-    
+    return self::$priceType;
+}
     public function resolve($root, $args) {
         $stmt = $this->conn->prepare("SELECT * FROM products WHERE id = ?");
         $stmt->bind_param("s", $args['id']);

@@ -25,6 +25,8 @@ class CartOverlay extends Component {
         .toFixed(2)
     );
     const products = this.gatherProductInfo();
+    this.props.setShowModal(true);
+    this.props.setShowCart(false);
     try {
       // Execute the GraphQL mutation to place an order
       const result = await client.mutate({
@@ -101,8 +103,8 @@ class CartOverlay extends Component {
                     <button
                       className="check-btn"
                       onClick={() => {
-                        this.props.setShowModal(true);
-                        this.props.setShowCart(false);
+                        // this.props.setShowModal(true);
+                        // this.props.setShowCart(false);
                         this.handlePlaceOrder(client);
                       }}
                     >

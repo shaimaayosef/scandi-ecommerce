@@ -6,8 +6,12 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 
 class ProductAttributeModel extends BaseModel {
+    private static $attributeType = null;
+    private static $attributeItemsType = null;
+
     public function getGraphQLType() {
-        return new ObjectType([
+        if (self::$attributeType === null) {
+            self::$attributeType = new ObjectType([
             'name' => 'ProductAttributes',
             'fields' => [
                 'id' => ['type' => Type::string()],
@@ -21,9 +25,12 @@ class ProductAttributeModel extends BaseModel {
             ]
         ]);
     }
+    return self::$attributeType;
+}
     
     private function getAttributeItemsType() {
-        return new ObjectType([
+        if (self::$attributeItemsType === null) {
+            self::$attributeItemsType = new ObjectType([
             'name' => 'ProductAttributeItems',
             'fields' => [
                 'item_id' => ['type' => Type::string()],
@@ -34,7 +41,8 @@ class ProductAttributeModel extends BaseModel {
             ]
         ]);
     }
-    
+    return self::$attributeItemsType;
+}
     public function resolve($root, $args ) {
         return $this->resolveForProduct($args['productId']);
     }

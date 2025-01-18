@@ -7,8 +7,11 @@ use GraphQL\Type\Definition\Type;
 use RuntimeException;
 
 class CategoryModel extends BaseModel {
+    private static $categoryType = null;
+
     public function getGraphQLType() {
-        return new ObjectType([
+        if (self::$categoryType === null) {
+            self::$categoryType = new ObjectType([
             'name' => 'Category',
             'fields' => [
                 'name' => ['type' => Type::string()],
@@ -18,6 +21,8 @@ class CategoryModel extends BaseModel {
                 ]
             ]
         ]);
+    }
+    return self::$categoryType;
     }
     
     public function resolve($root, $args ) {
